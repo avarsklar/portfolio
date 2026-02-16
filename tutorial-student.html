@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Make Your Game Playable by Everyone | Accessible Pygame Tutorial</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Source+Serif+4:wght@400;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg: #fafafa; --bg-alt: #f0f4f8; --text: #1a1a2e; --muted: #5a6072;
+            --accent: #7c3aed; --accent-light: #ede9fe; --border: #e2e8f0;
+            --card: #ffffff; --code-bg: #1e1e2e; --code-text: #cdd6f4;
+            --green: #16a34a; --green-bg: #f0fdf4;
+            --blue: #2563eb; --blue-bg: #eff6ff;
+            --orange: #ea580c; --orange-bg: #fff7ed;
+            --pink: #db2777; --pink-bg: #fdf2f8;
+            --font: 'Inter', -apple-system, sans-serif;
+            --serif: 'Source Serif 4', Georgia, serif;
+            --mono: 'Fira Code', monospace;
+        }
+        html { scroll-behavior: smooth; }
+        body { font-family: var(--font); color: var(--text); background: var(--bg); line-height: 1.75; font-size: 16px; }
+
+        /* NAV */
+        .topbar { background: var(--accent); color: white; padding: 0.75rem 2rem; font-size: 0.85rem; font-weight: 500; }
+        .topbar a { color: white; margin-left: 1rem; }
+
+        .container { max-width: 800px; margin: 0 auto; padding: 2rem; }
+
+        /* HERO */
+        .hero { background: linear-gradient(135deg, var(--accent-light) 0%, var(--bg) 100%); padding: 4rem 2rem 3rem; text-align: center; }
+        .hero h1 { font-family: var(--serif); font-size: 2.75rem; font-weight: 600; line-height: 1.2; margin-bottom: 1rem; }
+        .hero p { font-size: 1.15rem; color: var(--muted); max-width: 600px; margin: 0 auto 1.5rem; }
+        .hero .badge { display: inline-block; background: var(--accent); color: white; padding: 0.4rem 1rem; border-radius: 100px; font-size: 0.85rem; font-weight: 500; }
+
+        /* STEPS */
+        .step { margin-bottom: 3rem; padding-bottom: 2rem; border-bottom: 1px solid var(--border); }
+        .step:last-of-type { border-bottom: none; }
+        .step-number { display: inline-block; background: var(--accent); color: white; width: 36px; height: 36px; border-radius: 50%; text-align: center; line-height: 36px; font-weight: 700; font-size: 0.95rem; margin-bottom: 0.75rem; }
+        .step h2 { font-family: var(--serif); font-size: 1.6rem; font-weight: 600; margin-bottom: 0.5rem; }
+        .step h3 { font-size: 1.1rem; font-weight: 600; margin: 1.5rem 0 0.5rem; color: var(--text); }
+        .step p { color: var(--muted); margin-bottom: 0.75rem; }
+        .step ul, .step ol { padding-left: 1.5rem; margin-bottom: 1rem; }
+        .step li { color: var(--muted); margin-bottom: 0.35rem; }
+
+        /* BOXES */
+        .box { border-radius: 10px; padding: 1.25rem 1.5rem; margin: 1.25rem 0; }
+        .box-title { font-weight: 600; font-size: 0.95rem; margin-bottom: 0.4rem; }
+        .box p { margin-bottom: 0.5rem; }
+        .box p:last-child { margin-bottom: 0; }
+
+        .box-why { background: var(--pink-bg); border: 1px solid #fbcfe8; }
+        .box-why .box-title { color: var(--pink); }
+        .box-try { background: var(--orange-bg); border: 1px solid #fed7aa; }
+        .box-try .box-title { color: var(--orange); }
+        .box-explain { background: var(--blue-bg); border: 1px solid #bfdbfe; }
+        .box-explain .box-title { color: var(--blue); }
+        .box-done { background: var(--green-bg); border: 1px solid #bbf7d0; }
+        .box-done .box-title { color: var(--green); }
+
+        /* CODE */
+        pre { background: var(--code-bg); color: var(--code-text); border-radius: 10px; padding: 1.25rem 1.5rem; overflow-x: auto; margin: 1rem 0; font-family: var(--mono); font-size: 0.85rem; line-height: 1.65; }
+        code { font-family: var(--mono); font-size: 0.87em; background: var(--bg-alt); padding: 0.15rem 0.4rem; border-radius: 4px; }
+        pre code { background: none; padding: 0; }
+        .code-filename { font-size: 0.8rem; font-weight: 600; color: var(--accent); margin-bottom: 0.25rem; }
+
+        /* COMPARE */
+        .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1rem 0; }
+        .compare-card { border-radius: 10px; padding: 1rem; text-align: center; }
+        .compare-card.bad { background: #fef2f2; border: 2px solid #fca5a5; }
+        .compare-card.good { background: #f0fdf4; border: 2px solid #86efac; }
+        .compare-label { font-weight: 700; font-size: 0.85rem; margin-bottom: 0.5rem; }
+        .compare-card.bad .compare-label { color: #dc2626; }
+        .compare-card.good .compare-label { color: #16a34a; }
+        .compare-demo { padding: 1.5rem; border-radius: 8px; margin: 0.5rem 0; }
+
+        /* PROGRESS */
+        .progress-bar { background: var(--bg-alt); border-radius: 100px; height: 8px; margin: 1rem 0 2rem; overflow: hidden; }
+        .progress-fill { background: var(--accent); height: 100%; border-radius: 100px; transition: width 0.3s; }
+
+        /* VOCAB */
+        .vocab { display: grid; grid-template-columns: 120px 1fr; gap: 0.25rem 1rem; margin: 0.75rem 0; font-size: 0.92rem; }
+        .vocab dt { font-weight: 600; color: var(--text); }
+        .vocab dd { color: var(--muted); margin-bottom: 0.5rem; }
+
+        footer { text-align: center; padding: 2rem; color: var(--muted); font-size: 0.85rem; border-top: 1px solid var(--border); margin-top: 2rem; }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+            .compare { grid-template-columns: 1fr; }
+            .container { padding: 1.25rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="topbar">
+    Student Tutorial &mdash; <a href="index.html">Portfolio</a> | <a href="tutorial-professor.html">Instructor Version</a>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+    <div class="badge">No experience needed</div>
+    <h1>Make Your Game Playable by Everyone</h1>
+    <p>Learn how to build a car-dodging game in Python and make it accessible &mdash; so anyone can play it, no matter their abilities.</p>
+</div>
+
+<div class="container">
+
+<!-- INTRO -->
+<div class="step">
+    <h2>What Are We Building?</h2>
+    <p>We're going to build a simple game where you drive a car and dodge enemies coming at you. Then we'll make it <strong>accessible</strong> &mdash; meaning people with different abilities (like low vision, color blindness, or hearing differences) can enjoy it too.</p>
+
+    <div class="box box-why">
+        <div class="box-title">Why does accessibility matter?</div>
+        <p>About 1 in 4 adults in the US has some type of disability. If your game only works for people with perfect vision and fast reflexes, you're leaving out a LOT of players. Accessible design makes games better for <em>everyone</em> &mdash; not just disabled people. Ever wanted a "slow mode" to practice? That's an accessibility feature!</p>
+    </div>
+
+    <h3>What You'll Need</h3>
+    <ul>
+        <li>A computer with Python installed</li>
+        <li>A text editor (VS Code, IDLE, or anything you like)</li>
+        <li>Pygame (we'll install it below)</li>
+        <li>About 2 hours of time</li>
+    </ul>
+
+    <h3>Quick Vocab</h3>
+    <dl class="vocab">
+        <dt>Pygame</dt>
+        <dd>A free Python tool for making games with graphics and sound</dd>
+        <dt>WCAG</dt>
+        <dd>Rules (from the W3C organization) about making digital stuff usable by everyone</dd>
+        <dt>Sprite</dt>
+        <dd>A game character or object (your car, the enemy car, etc.)</dd>
+        <dt>FPS</dt>
+        <dd>Frames per second &mdash; how many times the screen redraws. Higher = smoother and faster</dd>
+        <dt>Contrast</dt>
+        <dd>How different two colors look next to each other. High contrast = easy to see</dd>
+    </dl>
+</div>
+
+<!-- STEP 1: SETUP -->
+<div class="step">
+    <div class="step-number">1</div>
+    <h2>Setting Up</h2>
+    <div class="progress-bar"><div class="progress-fill" style="width: 10%"></div></div>
+
+    <p>First, let's install Pygame. Open your terminal (or command prompt on Windows) and type:</p>
+    <pre><code>pip install pygame</code></pre>
+
+    <p>Now create a new file called <code>game.py</code> and add these first lines:</p>
+    <pre><code># These lines load the tools we need
+import pygame, sys
+from pygame.locals import *
+import random, time
+
+# Start up Pygame
+pygame.init()</code></pre>
+
+    <div class="box box-explain">
+        <div class="box-title">What's happening here?</div>
+        <p><code>import pygame</code> loads the game-making tools. <code>pygame.init()</code> turns them on. Think of it like plugging in a game console and pressing the power button &mdash; you need both steps.</p>
+    </div>
+</div>
+
+<!-- STEP 2: GAME WINDOW -->
+<div class="step">
+    <div class="step-number">2</div>
+    <h2>Creating the Game Window</h2>
+    <div class="progress-bar"><div class="progress-fill" style="width: 20%"></div></div>
+
+    <p>Next, let's set up our game window and some basic settings:</p>
+    <pre><code># Game speed settings
+normal_mode = 60   # Normal speed: 60 frames per second
+slow_mode = 30     # Slow speed: 30 frames per second
+FPS = normal_mode
+FramePerSec = pygame.time.Clock()
+
+# Colors (Red, Green, Blue) - each value from 0 to 255
+BLUE  = (0, 0, 255)
+RED   = (255, 0, 0)
+GREEN = (0, 255, 0)
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
+
+# Game window size
+SCREEN_WIDTH = 400
+SCREEN_HEIGHT = 600
+SPEED = 5
+SCORE = 0
+
+# Create the window
+DISPLAYSURF = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+DISPLAYSURF.fill(WHITE)
+pygame.display.set_caption("My Game")</code></pre>
+
+    <div class="box box-explain">
+        <div class="box-title">Colors are just 3 numbers</div>
+        <p>Every color on your screen is made from mixing <strong>Red</strong>, <strong>Green</strong>, and <strong>Blue</strong> light. Each goes from 0 (none) to 255 (maximum). So <code>(255, 0, 0)</code> is pure red, <code>(0, 0, 0)</code> is black (no light), and <code>(255, 255, 255)</code> is white (all the light). Try making your own colors!</p>
+    </div>
+</div>
+
+<!-- STEP 3: GAME CHARACTERS -->
+<div class="step">
+    <div class="step-number">3</div>
+    <h2>Creating Your Characters</h2>
+    <div class="progress-bar"><div class="progress-fill" style="width: 35%"></div></div>
+
+    <p>In games, we use "classes" to create characters. Think of a class as a <strong>cookie cutter</strong> &mdash; it's a template, and every cookie (game object) made from it has the same shape but can be decorated differently.</p>
+
+    <h3>The Enemy (the car you dodge)</h3>
+    <pre><code>class Enemy(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        self.image = pygame.image.load("Enemy.png")
+        self.rect = self.image.get_rect()
+        # Start at a random spot at the top of the screen
+        self.rect.center = (random.randint(40, SCREEN_WIDTH-40), 0)
+
+    def move(self):
+        global SCORE
+        # Move down the screen
+        self.rect.move_ip(0, SPEED)
+        # If the enemy goes past the bottom, respawn at the top
+        if self.rect.top > 600:
+            SCORE += 1
+            self.rect.top = 0
+            self.rect.center = (random.randint(40, SCREEN_WIDTH - 40), 0)</code></pre>
+
+    <h3>The Player (you!)</h3>
+    <pre><code>class Player(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        self.image = pygame.image.load("Player.png")
+        self.rect = self.image.get_rect()
+        self.rect.center = (160, 520)    # Start near the bottom
+
+    def move(self):
+        pressed_keys = pygame.key.get_pressed()
+        # Move left (but don't go off screen)
+        if self.rect.left > 0:
+            if pressed_keys[K_LEFT]:
+                self.rect.move_ip(-5, 0)
+        # Move right (but don't go off screen)
+        if self.rect.right < SCREEN_WIDTH:
+            if pressed_keys[K_RIGHT]:
+                self.rect.move_ip(5, 0)</code></pre>
+
+    <div class="box box-explain">
+        <div class="box-title">What's a "rect"?</div>
+        <p>A <strong>rect</strong> (short for rectangle) is an invisible box around your character. The game uses this box to figure out where your character is and whether it bumped into anything. Every sprite has one.</p>
+    </div>
+</div>
+
+<!-- STEP 4: GAME LOOP -->
+<div class="step">
+    <div class="step-number">4</div>
+    <h2>The Game Loop &mdash; Making It Run</h2>
+    <div class="progress-bar"><div class="progress-fill" style="width: 50%"></div></div>
+
+    <p>The game loop is the heartbeat of your game. It runs over and over (60 times per second!) doing three things: <strong>check what happened</strong>, <strong>update everything</strong>, and <strong>draw it on screen</strong>.</p>
+
+    <pre><code># Create the characters
+P1 = Player()
+E1 = Enemy()
+
+# Put them in groups (makes collision detection easier)
+enemies = pygame.sprite.Group()
+enemies.add(E1)
+all_sprites = pygame.sprite.Group()
+all_sprites.add(P1)
+all_sprites.add(E1)
+
+# Make the game get harder over time
+INC_SPEED = pygame.USEREVENT + 1
+pygame.time.set_timer(INC_SPEED, 1000)  # Every 1 second
+
+# THE GAME LOOP
+while True:
+
+    # 1. CHECK WHAT HAPPENED
+    for event in pygame.event.get():
+        if event.type == INC_SPEED:
+            SPEED += 0.5          # Game gets faster!
+        if event.type == QUIT:
+            pygame.quit()
+            sys.exit()
+
+    # 2. UPDATE EVERYTHING
+    DISPLAYSURF.fill(WHITE)       # Clear the screen
+    for entity in all_sprites:
+        entity.move()
+        DISPLAYSURF.blit(entity.image, entity.rect)
+
+    # 3. CHECK FOR CRASHES
+    if pygame.sprite.spritecollideany(P1, enemies):
+        DISPLAYSURF.fill(RED)     # Flash red
+        pygame.display.update()
+        for entity in all_sprites:
+            entity.kill()
+        time.sleep(2)
+        pygame.quit()
+        sys.exit()
+
+    # 4. DRAW AND WAIT
+    pygame.display.update()
+    FramePerSec.tick(FPS)</code></pre>
+
+    <div class="box box-try">
+        <div class="box-title">Try it!</div>
+        <p>Save and run your game with <code>python game.py</code>. You should see your car at the bottom and an enemy coming down from the top. Use the left and right arrow keys to dodge!</p>
+        <p><strong>Note:</strong> You'll need image files called <code>Player.png</code> and <code>Enemy.png</code> in the same folder. Ask your teacher for these, or draw simple colored rectangles for now.</p>
+    </div>
+</div>
+
+<!-- STEP 5: THE PROBLEM -->
+<div class="step">
+    <div class="step-number">5</div>
+    <h2>Wait... Not Everyone Can Play This</h2>
+    <div class="progress-bar"><div class="progress-fill" style="width: 60%"></div></div>
+
+    <p>Your game works! But it has some serious problems that make it hard or impossible for some people to play:</p>
+
+    <div class="compare">
+        <div class="compare-card bad">
+            <div class="compare-label">Problem</div>
+            <div class="compare-demo" style="background: #808080; color: #0000FF; font-size: 1.5rem; font-weight: bold;">Can you see this?</div>
+            <p style="font-size: 0.85rem; color: var(--muted); margin-top: 0.5rem;">Blue text on grey &mdash; contrast ratio 1.07:1. Almost invisible for people with low vision.</p>
+        </div>
+        <div class="compare-card good">
+            <div class="compare-label">Fixed</div>
+            <div class="compare-demo" style="background: #1a1a2e; color: #FFD700; font-size: 1.5rem; font-weight: bold;">Easy to read!</div>
+            <p style="font-size: 0.85rem; color: var(--muted); margin-top: 0.5rem;">Yellow on dark blue &mdash; contrast ratio 12.5:1. Clear for everyone.</p>
+        </div>
+    </div>
+
+    <p>Here's what's wrong and who it affects:</p>
+    <ul>
+        <li><strong>Low contrast colors:</strong> People with low vision or color blindness can't tell the player from the background</li>
+        <li><strong>Tiny score text:</strong> Hard to read, especially for players with visual impairments</li>
+        <li><strong>Only one speed:</strong> Too fast for players who need more reaction time (motor disabilities, cognitive disabilities, or just beginners!)</li>
+        <li><strong>No volume control:</strong> Players with sensory sensitivities can't adjust the crash sound</li>
+        <li><strong>Hard-to-read font:</strong> Some fonts look great but are awful for people with dyslexia or low vision</li>
+    </ul>
+
+    <div class="box box-why">
+        <div class="box-title">The rules we'll follow: WCAG AA</div>
+        <p><strong>WCAG</strong> (Web Content Accessibility Guidelines) are rules created by accessibility experts for making digital stuff usable by everyone. The key rules for us:</p>
+        <ul>
+            <li>Text must have a contrast ratio of at least <strong>4.5:1</strong></li>
+            <li>Game objects must have a contrast ratio of at least <strong>3:1</strong></li>
+            <li>Users should be able to control timing (speed)</li>
+            <li>Users should be able to control audio</li>
+        </ul>
+        <p>You can check your contrast at <a href="https://webaim.org/resources/contrastchecker/" style="color: var(--pink);">webaim.org/resources/contrastchecker</a></p>
+    </div>
+</div>
+
+<!-- STEP 6: FIX CONTRAST -->
+<div class="step">
+    <div class="step-number">6</div>
+    <h2>Fix #1: Make Colors Pop</h2>
+    <div class="progress-bar"><div class="progress-fill" style="width: 70%"></div></div>
+
+    <p>The score is almost invisible on the original game. Let's make it big, bold, and backed by a bright yellow box:</p>
+
+    <pre><code># After drawing the background, add this:
+DISPLAYSURF.blit(background, (0, 0))
+
+# Draw a bright yellow box behind the score
+scores = font.render(str(SCORE), True, BLACK)
+pygame.draw.rect(DISPLAYSURF, (255, 200, 0), (0, 0, 60, 65))
+DISPLAYSURF.blit(scores, (15, 15))</code></pre>
+
+    <p>We also need darker backgrounds and higher-contrast car sprites. If you're making your own sprites, use colors that look very different from each other &mdash; don't put a light blue car on a light grey road.</p>
+
+    <div class="box box-try">
+        <div class="box-title">Check your contrast</div>
+        <p>Go to <a href="https://webaim.org/resources/contrastchecker/" style="color: var(--orange)">WebAIM's Contrast Checker</a>. Type in your background color and your object color. Does it pass the <strong>3:1</strong> minimum for objects? Try different combos until you find ones that work!</p>
+    </div>
+</div>
+
+<!-- STEP 7: SLOW MODE -->
+<div class="step">
+    <div class="step-number">7</div>
+    <h2>Fix #2: Add a Slow Mode</h2>
+    <div class="progress-bar"><div class="progress-fill" style="width: 80%"></div></div>
+
+    <p>Not everyone has the same reaction speed. Let's add a toggle so players can press <strong>Spacebar</strong> to switch between normal and slow mode:</p>
+
+    <pre><code># Add this variable before the game loop
+mode_message_time = 0
+
+# Inside the event loop, add this:
+if event.type == KEYDOWN:
+    if event.key == K_SPACE:
+        if FPS == normal_mode:
+            FPS = slow_mode         # Switch to slow
+        else:
+            FPS = normal_mode       # Switch back to normal
+        mode_message_time = time.time()
+
+# After drawing the score, show which mode we're in:
+if time.time() - mode_message_time < 2:
+    mode_text = "SLOW MODE" if FPS == slow_mode else "NORMAL MODE"
+    mode_msg = font_medium.render(mode_text, True, BLACK)
+    rect = mode_msg.get_rect(topleft=(110, 20))
+    pygame.draw.rect(DISPLAYSURF, (255, 200, 0), rect)
+    DISPLAYSURF.blit(mode_msg, rect)</code></pre>
+
+    <div class="box box-explain">
+        <div class="box-title">How does this work?</div>
+        <p>Remember FPS (frames per second)? At 60 FPS, the game redraws 60 times per second. At 30 FPS, it redraws 30 times &mdash; half the speed. The game literally slows down because everything moves less often. The <code>time.time()</code> trick shows a "SLOW MODE" or "NORMAL MODE" message for 2 seconds after you press spacebar so the player knows what happened.</p>
+    </div>
+</div>
+
+<!-- STEP 8: FONT -->
+<div class="step">
+    <div class="step-number">8</div>
+    <h2>Fix #3: Use a Readable Font</h2>
+    <div class="progress-bar"><div class="progress-fill" style="width: 88%"></div></div>
+
+    <p>The <strong>Atkinson Hyperlegible</strong> font was created by the Braille Institute specifically for people with low vision. It makes characters like <code>I</code>, <code>l</code>, and <code>1</code> look clearly different from each other.</p>
+
+    <pre><code># Download "Atkinson-Hyperlegible-Regular-102.ttf" and put it in your game folder
+# Then set up your fonts like this:
+special = "Atkinson-Hyperlegible-Regular-102.ttf"
+
+font = pygame.font.SysFont(special, 60)          # Big - for "Game Over"
+font_medium = pygame.font.SysFont(special, 40)    # Medium - for mode display
+font_small = pygame.font.SysFont(special, 20)     # Small - for labels
+game_over = font.render("Game Over", True, BLACK)</code></pre>
+
+    <p>You can download this font for free at <a href="https://brailleinstitute.org/freefont">brailleinstitute.org/freefont</a>.</p>
+
+    <div class="box box-why">
+        <div class="box-title">Bad fonts vs. good fonts</div>
+        <p><strong>Avoid:</strong> Pixelated fonts, cursive/script fonts, fonts with thin strokes, fonts where letters look the same (like I and l).</p>
+        <p><strong>Good choices:</strong> Atkinson Hyperlegible, Verdana, Arial. These have clear, distinct characters and good spacing.</p>
+    </div>
+</div>
+
+<!-- STEP 9: VOLUME -->
+<div class="step">
+    <div class="step-number">9</div>
+    <h2>Fix #4: Let Players Control Volume</h2>
+    <div class="progress-bar"><div class="progress-fill" style="width: 95%"></div></div>
+
+    <p>Some people are very sensitive to loud sounds. Others might not hear well. Let's give the player control using the up/down arrow keys:</p>
+
+    <pre><code># Add this variable at the top with your other variables
+volume_level = 0.5  # Start at 50% volume
+
+# In the Player's move() function, add:
+def move(self):
+    global volume_level
+    pressed_keys = pygame.key.get_pressed()
+
+    # Volume up (up arrow)
+    if pressed_keys[K_UP] and volume_level < 1.0:
+        volume_level = volume_level + 0.1
+        volume_level = min(volume_level, 1.0)   # Don't go over 100%
+    # Volume down (down arrow)
+    if pressed_keys[K_DOWN] and volume_level > 0.0:
+        volume_level = volume_level - 0.1
+        volume_level = max(volume_level, 0.0)   # Don't go below 0%
+
+    # ... rest of the move code (left/right) ...
+
+# When the player crashes, play the sound at their chosen volume:
+if pygame.sprite.spritecollideany(P1, enemies):
+    crash = pygame.mixer.Sound('crash.wav')
+    crash.set_volume(volume_level)
+    crash.play()
+    time.sleep(1)
+    # ... game over code ...</code></pre>
+
+    <div class="box box-explain">
+        <div class="box-title">What does <code>min()</code> and <code>max()</code> do?</div>
+        <p><code>min(volume_level, 1.0)</code> picks whichever number is smaller. So if volume_level accidentally goes to 1.1, it gets capped back to 1.0. <code>max()</code> does the opposite &mdash; it prevents the volume from going below 0. This keeps the volume in a safe range.</p>
+    </div>
+</div>
+
+<!-- STEP 10: DONE -->
+<div class="step">
+    <div class="step-number">!</div>
+    <h2>You Did It!</h2>
+    <div class="progress-bar"><div class="progress-fill" style="width: 100%"></div></div>
+
+    <p>Your game now has four accessibility features that the original didn't:</p>
+
+    <div class="box box-done">
+        <div class="box-title">Your Accessibility Checklist</div>
+        <ul>
+            <li><strong>High-contrast colors</strong> &mdash; everyone can see the score and game objects clearly</li>
+            <li><strong>Slow mode</strong> &mdash; players who need more time can press Spacebar to slow down</li>
+            <li><strong>Readable font</strong> &mdash; Atkinson Hyperlegible is clear for people with low vision and dyslexia</li>
+            <li><strong>Volume control</strong> &mdash; players can adjust sound to their comfort level</li>
+        </ul>
+    </div>
+
+    <h3>Want to do more?</h3>
+    <ul>
+        <li><strong>Add color-blind mode:</strong> Use shapes (circles vs. squares) in addition to colors to tell objects apart</li>
+        <li><strong>Add screen reader support:</strong> Look into the <code>pyttsx3</code> library to announce score changes out loud</li>
+        <li><strong>Let players choose their keys:</strong> Not everyone can use arrow keys easily</li>
+        <li><strong>Add more enemies:</strong> Since we used classes, just do <code>E2 = Enemy()</code> and add it to the groups!</li>
+    </ul>
+
+    <div class="box box-why">
+        <div class="box-title">The big takeaway</div>
+        <p>Accessibility isn't about making a separate "special" version of your game. It's about making <strong>one game that works for as many people as possible</strong>. Every feature we added &mdash; slow mode, volume control, readable fonts &mdash; makes the game better for ALL players, not just disabled ones. That's what good design looks like.</p>
+    </div>
+</div>
+
+</div>
+
+<footer>
+    <p>Tutorial by Ava Sklar &middot; Bucknell University &middot; 2026</p>
+</footer>
+
+</body>
+</html>

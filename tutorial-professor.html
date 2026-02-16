@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instructor Guide: Making Pygame Games Accessible | Ava Sklar</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Source+Serif+4:wght@400;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg: #fafafa; --bg-alt: #f0f4f8; --text: #1a1a2e; --muted: #5a6072;
+            --accent: #2563eb; --accent-light: #dbeafe; --border: #e2e8f0;
+            --card: #ffffff; --code-bg: #1e1e2e; --code-text: #cdd6f4;
+            --green: #16a34a; --green-bg: #f0fdf4; --orange: #ea580c; --orange-bg: #fff7ed;
+            --purple: #7c3aed; --purple-bg: #f5f3ff;
+            --font: 'Inter', -apple-system, sans-serif;
+            --serif: 'Source Serif 4', Georgia, serif;
+            --mono: 'Fira Code', monospace;
+        }
+        html { scroll-behavior: smooth; }
+        body { font-family: var(--font); color: var(--text); background: var(--bg); line-height: 1.7; font-size: 16px; }
+
+        /* NAV */
+        .topbar { background: var(--accent); color: white; padding: 0.75rem 2rem; font-size: 0.85rem; font-weight: 500; }
+        .topbar a { color: white; margin-left: 1rem; }
+
+        /* LAYOUT */
+        .container { max-width: 900px; margin: 0 auto; padding: 2rem; }
+
+        /* HEADER */
+        .header { padding: 3rem 0 2rem; border-bottom: 2px solid var(--accent); margin-bottom: 2.5rem; }
+        .header .label { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); margin-bottom: 0.5rem; }
+        .header h1 { font-family: var(--serif); font-size: 2.5rem; font-weight: 600; line-height: 1.2; margin-bottom: 0.75rem; }
+        .header .subtitle { font-size: 1.1rem; color: var(--muted); max-width: 700px; }
+        .header .meta { margin-top: 1rem; font-size: 0.9rem; color: var(--muted); }
+        .header .meta span { margin-right: 1.5rem; }
+
+        /* TOC */
+        .toc { background: var(--bg-alt); border: 1px solid var(--border); border-radius: 10px; padding: 1.5rem 2rem; margin-bottom: 3rem; }
+        .toc h2 { font-size: 1rem; font-weight: 600; margin-bottom: 0.75rem; }
+        .toc ol { padding-left: 1.25rem; }
+        .toc li { margin-bottom: 0.4rem; font-size: 0.92rem; }
+        .toc a { color: var(--accent); text-decoration: none; }
+        .toc a:hover { text-decoration: underline; }
+
+        /* SECTIONS */
+        .lesson { margin-bottom: 3.5rem; }
+        .lesson h2 { font-family: var(--serif); font-size: 1.75rem; font-weight: 600; margin-bottom: 0.5rem; padding-top: 1rem; border-top: 1px solid var(--border); }
+        .lesson h3 { font-size: 1.15rem; font-weight: 600; margin: 1.5rem 0 0.5rem; }
+        .lesson p, .lesson li { color: var(--muted); }
+        .lesson p { margin-bottom: 0.75rem; }
+        .lesson ul, .lesson ol { padding-left: 1.5rem; margin-bottom: 1rem; }
+        .lesson li { margin-bottom: 0.35rem; }
+
+        /* CALLOUT BOXES */
+        .callout { border-radius: 8px; padding: 1.25rem 1.5rem; margin: 1.25rem 0; border-left: 4px solid; }
+        .callout-title { font-weight: 600; font-size: 0.9rem; margin-bottom: 0.4rem; }
+        .callout p { margin-bottom: 0.5rem; }
+        .callout p:last-child { margin-bottom: 0; }
+        .callout-objective { background: var(--green-bg); border-color: var(--green); }
+        .callout-objective .callout-title { color: var(--green); }
+        .callout-discuss { background: var(--purple-bg); border-color: var(--purple); }
+        .callout-discuss .callout-title { color: var(--purple); }
+        .callout-activity { background: var(--orange-bg); border-color: var(--orange); }
+        .callout-activity .callout-title { color: var(--orange); }
+        .callout-tip { background: var(--accent-light); border-color: var(--accent); }
+        .callout-tip .callout-title { color: var(--accent); }
+
+        /* CODE */
+        pre { background: var(--code-bg); color: var(--code-text); border-radius: 8px; padding: 1.25rem 1.5rem; overflow-x: auto; margin: 1rem 0; font-family: var(--mono); font-size: 0.88rem; line-height: 1.6; }
+        code { font-family: var(--mono); font-size: 0.88em; background: var(--bg-alt); padding: 0.15rem 0.4rem; border-radius: 4px; }
+        pre code { background: none; padding: 0; }
+        .code-label { font-size: 0.8rem; font-weight: 600; color: var(--muted); margin-bottom: 0.25rem; text-transform: uppercase; letter-spacing: 0.05em; }
+
+        /* TABLES */
+        table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.92rem; }
+        th { text-align: left; font-weight: 600; padding: 0.75rem 1rem; background: var(--bg-alt); border: 1px solid var(--border); }
+        td { padding: 0.75rem 1rem; border: 1px solid var(--border); color: var(--muted); }
+
+        /* COMPARISON */
+        .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1rem 0; }
+        .compare-box { border: 1px solid var(--border); border-radius: 8px; padding: 1rem 1.25rem; }
+        .compare-box.bad { border-color: #fca5a5; background: #fef2f2; }
+        .compare-box.good { border-color: #86efac; background: #f0fdf4; }
+        .compare-label { font-weight: 600; font-size: 0.85rem; margin-bottom: 0.5rem; }
+        .compare-box.bad .compare-label { color: #dc2626; }
+        .compare-box.good .compare-label { color: #16a34a; }
+
+        /* TIMELINE */
+        .timeline { display: grid; grid-template-columns: 100px 1fr; gap: 0.5rem 1rem; margin: 1rem 0; }
+        .timeline-time { font-weight: 600; font-size: 0.9rem; color: var(--accent); padding-top: 0.1rem; }
+        .timeline-item { padding-bottom: 0.75rem; border-bottom: 1px solid var(--border); color: var(--muted); font-size: 0.92rem; }
+
+        /* FOOTER */
+        footer { text-align: center; padding: 2rem; color: var(--muted); font-size: 0.85rem; border-top: 1px solid var(--border); margin-top: 2rem; }
+
+        @media (max-width: 768px) {
+            .container { padding: 1.25rem; }
+            .header h1 { font-size: 1.75rem; }
+            .compare { grid-template-columns: 1fr; }
+            .timeline { grid-template-columns: 80px 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="topbar">
+    Instructor Guide &mdash; <a href="index.html">Back to Portfolio</a> | <a href="tutorial-student.html">Student Version</a>
+</div>
+
+<div class="container">
+
+<div class="header">
+    <div class="label">Instructor Teaching Guide</div>
+    <h1>Making Pygame Games Accessible</h1>
+    <p class="subtitle">A lesson plan for teaching accessibility principles through hands-on game development with Python and Pygame, grounded in WCAG AA standards.</p>
+    <div class="meta">
+        <span>Author: Ava Sklar</span>
+        <span>Duration: 3&ndash;4 class sessions (50 min each)</span>
+        <span>Level: Intro CS / Intermediate</span>
+    </div>
+</div>
+
+<!-- TOC -->
+<div class="toc">
+    <h2>Table of Contents</h2>
+    <ol>
+        <li><a href="#overview">Course Overview &amp; Learning Objectives</a></li>
+        <li><a href="#prereqs">Prerequisites &amp; Setup</a></li>
+        <li><a href="#lesson1">Lesson 1: Pygame Foundations &amp; the Game Loop</a></li>
+        <li><a href="#lesson2">Lesson 2: Building the Game &mdash; Sprites, Classes &amp; Collision</a></li>
+        <li><a href="#lesson3">Lesson 3: Accessibility Audit &mdash; Applying WCAG to Games</a></li>
+        <li><a href="#lesson4">Lesson 4: Implementing Accessible Features</a></li>
+        <li><a href="#assessment">Assessment &amp; Extension Activities</a></li>
+        <li><a href="#resources">Resources &amp; References</a></li>
+    </ol>
+</div>
+
+<!-- OVERVIEW -->
+<div class="lesson" id="overview">
+    <h2>1. Course Overview &amp; Learning Objectives</h2>
+    <p>This module teaches students to build a simple arcade game in Pygame, then critically evaluate and improve its accessibility. Students learn that accessibility is not an afterthought &mdash; it's a design principle that makes software better for <em>all</em> users.</p>
+
+    <div class="callout callout-objective">
+        <div class="callout-title">Learning Objectives</div>
+        <p>By the end of this module, students will be able to:</p>
+        <ul>
+            <li>Explain the game loop pattern and implement it in Pygame</li>
+            <li>Use object-oriented programming to create Player and Enemy sprites</li>
+            <li>Identify accessibility barriers in software using WCAG AA criteria</li>
+            <li>Calculate and evaluate color contrast ratios for visual accessibility</li>
+            <li>Implement concrete accessibility features: adjustable speed, readable fonts, volume control, and high-contrast visuals</li>
+            <li>Articulate <em>why</em> each accessibility change matters and who it helps</li>
+        </ul>
+    </div>
+
+    <h3>Module Structure</h3>
+    <table>
+        <tr><th>Session</th><th>Topic</th><th>Key Concepts</th></tr>
+        <tr><td>Lesson 1</td><td>Pygame Foundations</td><td>Game loop, display, FPS, colors, coordinates</td></tr>
+        <tr><td>Lesson 2</td><td>Building the Game</td><td>OOP sprites, collision detection, events, scoring</td></tr>
+        <tr><td>Lesson 3</td><td>Accessibility Audit</td><td>WCAG AA, contrast ratios, cognitive load, sensory needs</td></tr>
+        <tr><td>Lesson 4</td><td>Implementing Fixes</td><td>High-contrast colors, speed modes, fonts, volume control</td></tr>
+    </table>
+</div>
+
+<!-- PREREQS -->
+<div class="lesson" id="prereqs">
+    <h2>2. Prerequisites &amp; Setup</h2>
+
+    <h3>Student Prerequisites</h3>
+    <ul>
+        <li>Basic Python knowledge: variables, functions, loops, conditionals</li>
+        <li>Familiarity with classes is helpful but not required (Lesson 2 introduces OOP)</li>
+        <li>No prior Pygame or game development experience needed</li>
+    </ul>
+
+    <h3>Environment Setup</h3>
+    <div class="code-label">Install Pygame</div>
+    <pre><code>pip install pygame</code></pre>
+
+    <h3>Required Files</h3>
+    <p>Students will need image assets (Player.png, Enemy.png, background image) and a crash sound file (crash.wav). These can be provided as a starter zip, or students can create simple colored rectangles programmatically.</p>
+
+    <div class="callout callout-tip">
+        <div class="callout-title">Instructor Tip</div>
+        <p>Consider distributing a "starter kit" zip file with the base (inaccessible) game already working. This lets Lesson 3 focus entirely on the audit and Lesson 4 on the fixes, rather than debugging setup issues.</p>
+    </div>
+</div>
+
+<!-- LESSON 1 -->
+<div class="lesson" id="lesson1">
+    <h2>3. Lesson 1: Pygame Foundations &amp; the Game Loop</h2>
+
+    <h3>Suggested Timeline (50 min)</h3>
+    <div class="timeline">
+        <div class="timeline-time">0&ndash;10 min</div>
+        <div class="timeline-item"><strong>Warm-up:</strong> Ask students to name their favorite game. What makes it enjoyable? What would happen if they couldn't see the colors, or the game moved too fast?</div>
+        <div class="timeline-time">10&ndash;20 min</div>
+        <div class="timeline-item"><strong>Lecture:</strong> Introduce Pygame &mdash; importing, initializing, the display surface</div>
+        <div class="timeline-time">20&ndash;35 min</div>
+        <div class="timeline-item"><strong>Live code:</strong> Build the game loop, explain FPS, demonstrate coordinate system</div>
+        <div class="timeline-time">35&ndash;45 min</div>
+        <div class="timeline-item"><strong>Hands-on:</strong> Students create a window, set a background color, and display a rectangle that moves</div>
+        <div class="timeline-time">45&ndash;50 min</div>
+        <div class="timeline-item"><strong>Wrap-up:</strong> Preview next session's OOP approach</div>
+    </div>
+
+    <h3>Key Concepts to Cover</h3>
+
+    <p><strong>Initializing Pygame:</strong></p>
+    <pre><code>import pygame, sys
+from pygame.locals import *
+
+pygame.init()</code></pre>
+    <p>Explain that <code>pygame.init()</code> starts the engine and must come before any Pygame code. The <code>pygame.locals</code> import gives access to constants like <code>QUIT</code>, <code>K_LEFT</code>, etc.</p>
+
+    <p><strong>The Game Loop:</strong></p>
+    <pre><code>#Game loop begins
+while True:
+    for event in pygame.event.get():
+        if event.type == QUIT:
+            pygame.quit()
+            sys.exit()
+
+    # Game logic goes here
+
+    pygame.display.update()
+    FramePerSec.tick(60)</code></pre>
+
+    <div class="callout callout-discuss">
+        <div class="callout-title">Discussion Prompt</div>
+        <p>"What would happen if we didn't limit the frame rate? Why might different players need different speeds?" This seeds the accessibility conversation for Lesson 3.</p>
+    </div>
+
+    <p><strong>Colors &amp; the Coordinate System:</strong></p>
+    <pre><code># RGB color tuples (0-255 per channel)
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
+RED   = (255, 0, 0)
+
+# Screen: (0,0) is top-left, x grows right, y grows down
+DISPLAYSURF = pygame.display.set_mode((400, 600))</code></pre>
+
+    <p><strong>Frames Per Second:</strong></p>
+    <pre><code># FPS controls game speed &mdash; 60 is standard, 30 is "slow mode"
+normal_mode = 60
+slow_mode = 30
+FPS = normal_mode
+FramePerSec = pygame.time.Clock()</code></pre>
+    <p>Explain that movies run at 24 FPS. Games typically aim for 30&ndash;60 FPS. Without a limiter, the loop runs as fast as the CPU allows, causing inconsistent behavior.</p>
+</div>
+
+<!-- LESSON 2 -->
+<div class="lesson" id="lesson2">
+    <h2>4. Lesson 2: Building the Game &mdash; Sprites, Classes &amp; Collision</h2>
+
+    <h3>Suggested Timeline (50 min)</h3>
+    <div class="timeline">
+        <div class="timeline-time">0&ndash;10 min</div>
+        <div class="timeline-item"><strong>Review:</strong> Quick recap of the game loop. Show the starting code from Lesson 1.</div>
+        <div class="timeline-time">10&ndash;25 min</div>
+        <div class="timeline-item"><strong>Lecture + live code:</strong> Introduce OOP through the Player and Enemy classes</div>
+        <div class="timeline-time">25&ndash;40 min</div>
+        <div class="timeline-item"><strong>Hands-on:</strong> Students implement sprite groups, collision detection, and scoring</div>
+        <div class="timeline-time">40&ndash;50 min</div>
+        <div class="timeline-item"><strong>Demo &amp; discussion:</strong> Play the completed (inaccessible) game. Ask: "What could make this hard for some players?"</div>
+    </div>
+
+    <h3>The Player Class</h3>
+    <pre><code>class Player(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        self.image = pygame.image.load("Player.png")
+        self.rect = self.image.get_rect()
+        self.rect.center = (160, 520)
+
+    def move(self):
+        pressed_keys = pygame.key.get_pressed()
+        if self.rect.left > 0:
+            if pressed_keys[K_LEFT]:
+                self.rect.move_ip(-5, 0)
+        if self.rect.right < SCREEN_WIDTH:
+            if pressed_keys[K_RIGHT]:
+                self.rect.move_ip(5, 0)</code></pre>
+
+    <div class="callout callout-tip">
+        <div class="callout-title">Teaching Note: OOP for Beginners</div>
+        <p>If students haven't seen classes before, frame it as a "blueprint." The Player class is a blueprint for creating a player object. <code>self</code> refers to "this specific player." <code>__init__</code> is what happens when a new player is created. Methods like <code>move()</code> are actions the player can take.</p>
+    </div>
+
+    <h3>The Enemy Class</h3>
+    <pre><code>class Enemy(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        self.image = pygame.image.load("Enemy.png")
+        self.rect = self.image.get_rect()
+        self.rect.center = (random.randint(40, SCREEN_WIDTH-40), 0)
+
+    def move(self):
+        global SCORE
+        self.rect.move_ip(0, SPEED)
+        if self.rect.top > 600:
+            SCORE += 1
+            self.rect.top = 0
+            self.rect.center = (random.randint(40, SCREEN_WIDTH - 40), 0)</code></pre>
+
+    <h3>Sprite Groups &amp; Collision Detection</h3>
+    <pre><code># Groups let us manage many sprites at once
+enemies = pygame.sprite.Group()
+enemies.add(E1)
+all_sprites = pygame.sprite.Group()
+all_sprites.add(P1)
+all_sprites.add(E1)
+
+# In the game loop &mdash; check if player hit any enemy
+if pygame.sprite.spritecollideany(P1, enemies):
+    # Game over!</code></pre>
+
+    <p>Explain that <code>spritecollideany()</code> checks if the first sprite's rect overlaps with any sprite in the group. This scales to hundreds of enemies without changing the code.</p>
+
+    <h3>Custom Events &amp; Increasing Difficulty</h3>
+    <pre><code>INC_SPEED = pygame.USEREVENT + 1
+pygame.time.set_timer(INC_SPEED, 1000)
+
+# In the game loop:
+if event.type == INC_SPEED:
+    SPEED += 0.5</code></pre>
+
+    <div class="callout callout-discuss">
+        <div class="callout-title">End-of-Lesson Discussion</div>
+        <p>Have students play the finished (inaccessible) version. Ask them to identify problems:</p>
+        <ul>
+            <li>"Can you read the score easily?"</li>
+            <li>"What if someone is color blind &mdash; can they tell the player from the background?"</li>
+            <li>"What if the game is too fast for someone to react?"</li>
+            <li>"What if the crash sound is too loud or too quiet?"</li>
+        </ul>
+        <p>Record their observations on the board. These become the "fix list" for Lessons 3&ndash;4.</p>
+    </div>
+</div>
+
+<!-- LESSON 3 -->
+<div class="lesson" id="lesson3">
+    <h2>5. Lesson 3: Accessibility Audit &mdash; Applying WCAG to Games</h2>
+
+    <h3>Suggested Timeline (50 min)</h3>
+    <div class="timeline">
+        <div class="timeline-time">0&ndash;15 min</div>
+        <div class="timeline-item"><strong>Lecture:</strong> Introduction to WCAG AA. What is accessibility? Who benefits?</div>
+        <div class="timeline-time">15&ndash;30 min</div>
+        <div class="timeline-item"><strong>Activity:</strong> Students audit the game using the WCAG checklist below</div>
+        <div class="timeline-time">30&ndash;40 min</div>
+        <div class="timeline-item"><strong>Group work:</strong> Teams present findings and propose solutions</div>
+        <div class="timeline-time">40&ndash;50 min</div>
+        <div class="timeline-item"><strong>Planning:</strong> Each student creates a prioritized fix list for Lesson 4</div>
+    </div>
+
+    <h3>Introduction to WCAG for Games</h3>
+    <p>The <strong>Web Content Accessibility Guidelines (WCAG)</strong> are the global standard for digital accessibility. While written for web content, the principles apply directly to games:</p>
+
+    <table>
+        <tr><th>WCAG Principle</th><th>Game Application</th></tr>
+        <tr><td><strong>Perceivable</strong></td><td>Can players see/hear all important game elements? Are colors distinguishable?</td></tr>
+        <tr><td><strong>Operable</strong></td><td>Can players control the game effectively? Is the speed manageable?</td></tr>
+        <tr><td><strong>Understandable</strong></td><td>Is text readable? Are game states clear (score, game over)?</td></tr>
+        <tr><td><strong>Robust</strong></td><td>Does the game work with different input methods and configurations?</td></tr>
+    </table>
+
+    <h3>Contrast: The Most Common Failure</h3>
+    <p>WCAG AA requires:</p>
+    <ul>
+        <li><strong>Text contrast:</strong> at least 4.5:1 against the background</li>
+        <li><strong>Non-text elements</strong> (game objects, UI): at least 3:1</li>
+    </ul>
+
+    <div class="callout callout-activity">
+        <div class="callout-title">Hands-On Activity: Contrast Audit</div>
+        <p>Have students use <a href="https://webaim.org/resources/contrastchecker/" style="color: var(--orange)">WebAIM's Contrast Checker</a> to evaluate the original game's colors:</p>
+        <ul>
+            <li>Grey road (#808080) vs. white lines (#FFFFFF) &rarr; <strong>1.86:1</strong> (FAIL)</li>
+            <li>Grey road vs. yellow lines (#FFFF00) &rarr; <strong>1.49:1</strong> (FAIL)</li>
+            <li>Grey road vs. blue car (#0000FF) &rarr; <strong>1.07:1</strong> (FAIL)</li>
+        </ul>
+        <p>Then have them find accessible color combinations that pass 3:1 for objects and 4.5:1 for text.</p>
+    </div>
+
+    <h3>Full Accessibility Checklist for Student Audit</h3>
+    <table>
+        <tr><th>Category</th><th>Question</th><th>WCAG Criterion</th></tr>
+        <tr><td>Contrast</td><td>Do all game objects meet 3:1 contrast against the background?</td><td>1.4.11</td></tr>
+        <tr><td>Contrast</td><td>Does all text meet 4.5:1 contrast?</td><td>1.4.3</td></tr>
+        <tr><td>Speed</td><td>Can players adjust the game speed?</td><td>2.2.1 (Timing)</td></tr>
+        <tr><td>Font</td><td>Is the font readable with distinct characters and adequate sizing?</td><td>1.4.12</td></tr>
+        <tr><td>Sound</td><td>Can users control audio volume independently?</td><td>1.4.2</td></tr>
+        <tr><td>Motion</td><td>Are there flashing elements (&gt;3 per second)?</td><td>2.3.1</td></tr>
+        <tr><td>Input</td><td>Is the game fully playable with keyboard only?</td><td>2.1.1</td></tr>
+        <tr><td>Feedback</td><td>Are game states (score, game over) clearly communicated?</td><td>3.3.1</td></tr>
+    </table>
+</div>
+
+<!-- LESSON 4 -->
+<div class="lesson" id="lesson4">
+    <h2>6. Lesson 4: Implementing Accessible Features</h2>
+
+    <h3>Suggested Timeline (50 min)</h3>
+    <div class="timeline">
+        <div class="timeline-time">0&ndash;5 min</div>
+        <div class="timeline-item"><strong>Review:</strong> Share audit findings. Prioritize the fix list.</div>
+        <div class="timeline-time">5&ndash;40 min</div>
+        <div class="timeline-item"><strong>Hands-on coding:</strong> Students implement fixes (guided below)</div>
+        <div class="timeline-time">40&ndash;50 min</div>
+        <div class="timeline-item"><strong>Showcase:</strong> Side-by-side comparison. Reflection discussion.</div>
+    </div>
+
+    <h3>Fix 1: High-Contrast Colors &amp; Score Display</h3>
+
+    <div class="compare">
+        <div class="compare-box bad">
+            <div class="compare-label">Before (Inaccessible)</div>
+            <p style="color: var(--muted); font-size: 0.9rem;">Grey background, small score text blending into the road, low-contrast car colors</p>
+        </div>
+        <div class="compare-box good">
+            <div class="compare-label">After (Accessible)</div>
+            <p style="color: var(--muted); font-size: 0.9rem;">Dark background, bold score on yellow rectangle, high-contrast car sprites</p>
+        </div>
+    </div>
+
+    <pre><code># Draw background, then score with high-contrast backing
+DISPLAYSURF.blit(background, (0,0))
+scores = font.render(str(SCORE), True, BLACK)
+pygame.draw.rect(DISPLAYSURF, (255, 200, 0), (0, 0, 60, 65))  # Yellow box behind score
+DISPLAYSURF.blit(scores, (15, 15))</code></pre>
+    <p>Explain that the yellow rectangle behind the score creates a guaranteed high-contrast backdrop, regardless of the background image beneath it.</p>
+
+    <h3>Fix 2: Adjustable Speed (Slow Mode)</h3>
+    <pre><code># Setup
+normal_mode = 60
+slow_mode = 30
+FPS = normal_mode
+
+# In the event loop &mdash; toggle with spacebar
+if event.type == KEYDOWN:
+    if event.key == K_SPACE:
+        if FPS == normal_mode:
+            FPS = slow_mode
+        else:
+            FPS = normal_mode
+        mode_message_time = time.time()
+
+# Display current mode for 2 seconds after switching
+if time.time() - mode_message_time < 2:
+    mode_text = "SLOW MODE" if FPS == slow_mode else "NORMAL MODE"
+    mode_msg = font_medium.render(mode_text, True, BLACK)
+    rect = mode_msg.get_rect(topleft=(110, 20))
+    pygame.draw.rect(DISPLAYSURF, (255, 200, 0), rect)
+    DISPLAYSURF.blit(mode_msg, rect)</code></pre>
+
+    <div class="callout callout-discuss">
+        <div class="callout-title">Discussion: Who Benefits from Slow Mode?</div>
+        <ul>
+            <li>Players with motor disabilities who need more reaction time</li>
+            <li>Players with cognitive disabilities who process visual information more slowly</li>
+            <li>New players warming up before full speed</li>
+            <li>Young children or elderly players</li>
+            <li><strong>Key insight:</strong> Accessible features often benefit <em>everyone</em>, not just disabled users</li>
+        </ul>
+    </div>
+
+    <h3>Fix 3: Accessible Font (Atkinson Hyperlegible)</h3>
+    <pre><code># Use Atkinson Hyperlegible &mdash; designed for low vision readers
+# Download from: https://brailleinstitute.org/freefont
+special = "Atkinson-Hyperlegible-Regular-102.ttf"
+
+font = pygame.font.SysFont(special, 60)
+font_medium = pygame.font.SysFont(special, 40)
+font_small = pygame.font.SysFont(special, 20)
+game_over = font.render("Game Over", True, BLACK)</code></pre>
+    <p>WCAG recommends fonts that are easy to read, have distinct characters (e.g., clear difference between I, l, 1), and generous spacing. Avoid pixelated, cursive, or thin-stroke fonts.</p>
+
+    <h3>Fix 4: Volume Control</h3>
+    <pre><code># Global variable
+volume_level = 0.5
+
+# In Player.move() &mdash; up/down arrows adjust volume
+if pressed_keys[K_UP] and volume_level < 1.0:
+    volume_level = volume_level + 0.1
+    volume_level = min(volume_level, 1.0)
+if pressed_keys[K_DOWN] and volume_level > 0.0:
+    volume_level = volume_level - 0.1
+    volume_level = max(volume_level, 0.0)
+
+# On collision &mdash; play crash at user-set volume
+crash = pygame.mixer.Sound('crash.wav')
+crash.set_volume(volume_level)
+crash.play()</code></pre>
+
+    <div class="callout callout-tip">
+        <div class="callout-title">Why Volume Control Matters</div>
+        <p>People with sensory sensitivities (common in autism) may find sudden loud sounds distressing. People who are hard of hearing may need higher volume. Giving users control over their audio environment is both an accessibility requirement and a UX best practice.</p>
+    </div>
+</div>
+
+<!-- ASSESSMENT -->
+<div class="lesson" id="assessment">
+    <h2>7. Assessment &amp; Extension Activities</h2>
+
+    <h3>Assessment Rubric</h3>
+    <table>
+        <tr><th>Criterion</th><th>Excellent (A)</th><th>Proficient (B)</th><th>Developing (C)</th></tr>
+        <tr><td>Working game</td><td>Game runs with no errors, all features work</td><td>Game runs with minor issues</td><td>Game has significant bugs</td></tr>
+        <tr><td>Contrast fixes</td><td>All elements pass WCAG AA ratios with documented checks</td><td>Most elements pass</td><td>Some improvements made</td></tr>
+        <tr><td>Speed mode</td><td>Toggle works, displays mode, smooth transition</td><td>Toggle works</td><td>Attempted but buggy</td></tr>
+        <tr><td>Font &amp; readability</td><td>Accessible font, appropriate sizing, high-contrast text</td><td>Font changed, sizing adequate</td><td>Default font unchanged</td></tr>
+        <tr><td>Sound/volume</td><td>User-controllable volume, appropriate feedback</td><td>Volume control works</td><td>Sound plays but no control</td></tr>
+        <tr><td>Reflection</td><td>Thoughtful written reflection on who benefits and why</td><td>Basic reflection</td><td>Minimal reflection</td></tr>
+    </table>
+
+    <h3>Extension Activities</h3>
+    <div class="callout callout-activity">
+        <div class="callout-title">For Advanced Students</div>
+        <ul>
+            <li><strong>Screen reader support:</strong> Add text-to-speech announcements for score changes and game over using <code>pyttsx3</code></li>
+            <li><strong>Color blind modes:</strong> Implement pattern/shape differentiation instead of relying solely on color</li>
+            <li><strong>Remappable controls:</strong> Let players choose their own key bindings</li>
+            <li><strong>Audit another game:</strong> Have students audit a commercial game or a classmate's project using the WCAG checklist</li>
+            <li><strong>Research project:</strong> Investigate the Game Accessibility Guidelines (gameaccessibilityguidelines.com) and compare to WCAG</li>
+        </ul>
+    </div>
+</div>
+
+<!-- RESOURCES -->
+<div class="lesson" id="resources">
+    <h2>8. Resources &amp; References</h2>
+    <ul>
+        <li><strong>WCAG 2.1 AA Guidelines:</strong> <a href="https://www.w3.org/WAI/WCAG21/quickref/">w3.org/WAI/WCAG21/quickref</a></li>
+        <li><strong>WebAIM Contrast Checker:</strong> <a href="https://webaim.org/resources/contrastchecker/">webaim.org/resources/contrastchecker</a></li>
+        <li><strong>Atkinson Hyperlegible Font:</strong> <a href="https://brailleinstitute.org/freefont">brailleinstitute.org/freefont</a></li>
+        <li><strong>Game Accessibility Guidelines:</strong> <a href="https://gameaccessibilityguidelines.com/">gameaccessibilityguidelines.com</a></li>
+        <li><strong>Pygame Documentation:</strong> <a href="https://www.pygame.org/docs/">pygame.org/docs</a></li>
+        <li><strong>Original Tutorial (Coders Legacy):</strong> <a href="https://coderslegacy.com/python/python-pygame-tutorial/">coderslegacy.com/python/python-pygame-tutorial</a></li>
+    </ul>
+</div>
+
+</div>
+
+<footer>
+    <p>Created by Ava Sklar &middot; Bucknell University &middot; 2026</p>
+</footer>
+
+</body>
+</html>
