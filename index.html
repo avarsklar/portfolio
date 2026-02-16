@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ava Sklar | Data Science Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="nav-content">
+        <a href="#" class="nav-logo">A.S.</a>
+        <div class="nav-links">
+            <a href="#about">About</a>
+            <a href="#research">Research</a>
+            <a href="#projects">Projects</a>
+            <a href="#skills">Skills</a>
+            <a href="#contact">Contact</a>
+        </div>
+    </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="about">
+    <div class="hero-content">
+        <div class="hero-text">
+            <p class="hero-greeting">Hi, I'm</p>
+            <h1>Ava Sklar</h1>
+            <p class="hero-tagline">Data science student passionate about using data to improve lives &mdash; from predicting epilepsy risk to making games accessible for everyone.</p>
+            <p class="hero-details">B.S. Psychology with minors in Business Analytics &amp; Computer Science<br>Bucknell University &middot; Class of 2028 &middot; GPA 3.75</p>
+            <div class="hero-links">
+                <a href="https://www.linkedin.com/in/ava-sklar-06851a2a2" target="_blank" class="btn btn-primary">LinkedIn</a>
+                <a href="https://github.com/avarsklar" target="_blank" class="btn btn-outline">GitHub</a>
+                <a href="mailto:ars038@bucknell.edu" class="btn btn-outline">Email Me</a>
+            </div>
+        </div>
+        <div class="hero-image">
+            <img src="assets/headshot.png" alt="Ava Sklar headshot">
+        </div>
+    </div>
+</section>
+
+<!-- RESEARCH -->
+<section class="section" id="research">
+    <div class="section-content">
+        <h2>Research</h2>
+        <p class="section-subtitle">Using data analysis to advance health science</p>
+
+        <div class="research-grid">
+            <div class="card card-featured">
+                <div class="card-label">Published Research &middot; AES 2023</div>
+                <h3>Sleep Breathing Variability as a Potential Biomarker for SUDEP Risk</h3>
+                <p class="card-role">Presenting Author &middot; American Epilepsy Society Annual Meeting</p>
+                <p>Investigated whether breathing variability during sleep could serve as a premortem biomarker for Sudden Unexpected Death in Epilepsy (SUDEP). Analyzed multi-modal EEG and cardiorespiratory recordings from 24 SUDEP patients and matched controls.</p>
+                <div class="card-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Methods</span>
+                        <span>Developed custom MATLAB code to extract breathing biomarkers (CV, RMSSD, HF/LF ratio, approximate entropy) from thoraco-abdominal band recordings during NREM sleep. Used Wilcoxon rank sum tests for non-parametric comparison.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Key Finding</span>
+                        <span>Coefficient of variation (CV) was significantly higher in the SUDEP group (P=0.0227), suggesting breathing variability as a viable premortem biomarker for risk stratification.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Impact</span>
+                        <span>Findings support early identification of at-risk patients and could help prioritize preventive strategies for epilepsy patients.</span>
+                    </div>
+                </div>
+                <div class="card-tags">
+                    <span class="tag">MATLAB</span>
+                    <span class="tag">Statistical Analysis</span>
+                    <span class="tag">Signal Processing</span>
+                    <span class="tag">Biomarker Discovery</span>
+                    <span class="tag">NIH Funded</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-label">Ongoing &middot; Bucknell University</div>
+                <h3>Infant Eye Movement Analysis</h3>
+                <p class="card-role">Data Analysis Fellow &middot; Jan 2025 &ndash; Present</p>
+                <p>Using Python and MATLAB to interpret babies' eye movement patterns. Synthesizing data with faculty mentors and stakeholders for symposium presentation. This work sits at the intersection of developmental psychology and computational data analysis.</p>
+                <div class="card-tags">
+                    <span class="tag">Python</span>
+                    <span class="tag">MATLAB</span>
+                    <span class="tag">Eye Tracking</span>
+                    <span class="tag">Developmental Psychology</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-label">Published &middot; Bucknell CS Department</div>
+                <h3>Burnout Among Accessibility Specialists</h3>
+                <p class="card-role">Research Intern &amp; Team Lead &middot; Feb &ndash; May 2025</p>
+                <p>Led a team researching burnout among accessibility specialists. Synthesized academic literature, structured complex datasets, and co-authored a paper for potential publication. Combined qualitative research methods with data-driven analysis.</p>
+                <div class="card-tags">
+                    <span class="tag">Literature Synthesis</span>
+                    <span class="tag">Data Structuring</span>
+                    <span class="tag">Accessibility</span>
+                    <span class="tag">Team Leadership</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- PROJECTS -->
+<section class="section section-alt" id="projects">
+    <div class="section-content">
+        <h2>Projects</h2>
+        <p class="section-subtitle">Building accessible games and interactive experiences with Python &amp; Pygame</p>
+
+        <div class="project-showcase">
+            <div class="project-intro">
+                <p>As part of a Bucknell University game development internship, I built a collection of <strong>6 accessible arcade games</strong> in Python using Pygame. These games are designed for deployment on a campus arcade machine, with a focus on accessibility: keyboard-only controls, adjustable speed modes, high-contrast visuals, and the Atkinson Hyperlegible font for readability.</p>
+                <a href="https://github.com/avarsklar/ava-arcade-games" target="_blank" class="btn btn-outline">View on GitHub</a>
+            </div>
+
+            <div class="games-grid">
+                <div class="game-card">
+                    <div class="game-img">
+                        <img src="assets/pacman.png" alt="Pacman game screenshot">
+                    </div>
+                    <div class="game-info">
+                        <h3>Pacman</h3>
+                        <p>Full clone with ghost AI (Blinky, Pinky, Inky, Clyde), power-ups, level progression, and persistent high scores. Modular architecture with separate game state, event handling, and screen management systems.</p>
+                        <div class="card-tags">
+                            <span class="tag">Ghost AI</span>
+                            <span class="tag">Pathfinding</span>
+                            <span class="tag">JSON Persistence</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="game-card">
+                    <div class="game-img">
+                        <img src="assets/jungledash.png" alt="Jungle Dash game screenshot">
+                    </div>
+                    <div class="game-info">
+                        <h3>Jungle Dash</h3>
+                        <p>2D platformer with multi-level tile-based design, collectible diamonds, enemy hazards (bees, slimes), and a built-in level editor for custom level creation.</p>
+                        <div class="card-tags">
+                            <span class="tag">Level Editor</span>
+                            <span class="tag">Tile-Based Design</span>
+                            <span class="tag">Physics</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="game-card">
+                    <div class="game-img">
+                        <img src="assets/tetris.png" alt="Tetris game screenshot">
+                    </div>
+                    <div class="game-info">
+                        <h3>Tetris</h3>
+                        <p>Classic block-placement game with level progression, piece rotation, and score tracking. Clean implementation demonstrating core game loop patterns.</p>
+                        <div class="card-tags">
+                            <span class="tag">Game Logic</span>
+                            <span class="tag">Level System</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="game-card">
+                    <div class="game-img">
+                        <img src="assets/flappybird.png" alt="Flappy Bird game screenshot">
+                    </div>
+                    <div class="game-info">
+                        <h3>Flappy Bird</h3>
+                        <p>Pipe-dodging game with gravity physics, collision detection, and high score tracking. Includes adjustable speed mode for accessibility.</p>
+                        <div class="card-tags">
+                            <span class="tag">Physics Simulation</span>
+                            <span class="tag">Speed Modes</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accessibility-callout">
+                <h3>Accessibility Features Across All Games</h3>
+                <div class="a11y-grid">
+                    <div class="a11y-item">
+                        <span class="a11y-icon">&#9000;</span>
+                        <span>Keyboard-only controls</span>
+                    </div>
+                    <div class="a11y-item">
+                        <span class="a11y-icon">&#9201;</span>
+                        <span>Adjustable speed modes (normal/slow)</span>
+                    </div>
+                    <div class="a11y-item">
+                        <span class="a11y-icon">&#9775;</span>
+                        <span>High-contrast color schemes</span>
+                    </div>
+                    <div class="a11y-item">
+                        <span class="a11y-icon">Aa</span>
+                        <span>Atkinson Hyperlegible font</span>
+                    </div>
+                    <div class="a11y-item">
+                        <span class="a11y-icon">&#128266;</span>
+                        <span>Volume controls</span>
+                    </div>
+                    <div class="a11y-item">
+                        <span class="a11y-icon">&#9654;</span>
+                        <span>Clear visual state indicators</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SKILLS -->
+<section class="section" id="skills">
+    <div class="section-content">
+        <h2>Skills &amp; Tools</h2>
+        <div class="skills-grid">
+            <div class="skill-group">
+                <h3>Programming</h3>
+                <div class="skill-items">
+                    <span class="skill">Python</span>
+                    <span class="skill">MATLAB</span>
+                    <span class="skill">R</span>
+                    <span class="skill">SQL</span>
+                </div>
+            </div>
+            <div class="skill-group">
+                <h3>Data &amp; Analysis</h3>
+                <div class="skill-items">
+                    <span class="skill">Statistical Analysis</span>
+                    <span class="skill">Signal Processing</span>
+                    <span class="skill">Data Visualization</span>
+                    <span class="skill">Excel / Spreadsheet Modeling</span>
+                    <span class="skill">Non-Parametric Tests</span>
+                </div>
+            </div>
+            <div class="skill-group">
+                <h3>Libraries &amp; Tools</h3>
+                <div class="skill-items">
+                    <span class="skill">Pygame</span>
+                    <span class="skill">BreathMetrics</span>
+                    <span class="skill">Brainstorm Suite</span>
+                    <span class="skill">Git / GitHub</span>
+                </div>
+            </div>
+            <div class="skill-group">
+                <h3>Coursework</h3>
+                <div class="skill-items">
+                    <span class="skill">Data Structures &amp; Algorithms</span>
+                    <span class="skill">Psychological Statistics</span>
+                    <span class="skill">Spreadsheet Modeling</span>
+                    <span class="skill">Creative Computing</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CONTACT -->
+<section class="section section-alt" id="contact">
+    <div class="section-content contact-section">
+        <h2>Let's Connect</h2>
+        <p>I'm looking for data science internships where I can work with data that has real human impact &mdash; health, accessibility, neuroscience, and beyond.</p>
+        <div class="contact-links">
+            <a href="mailto:ars038@bucknell.edu" class="btn btn-primary">ars038@bucknell.edu</a>
+            <a href="tel:+17138514813" class="btn btn-outline">(713) 851-4813</a>
+            <a href="https://www.linkedin.com/in/ava-sklar-06851a2a2" target="_blank" class="btn btn-outline">LinkedIn</a>
+            <a href="https://github.com/avarsklar" target="_blank" class="btn btn-outline">GitHub</a>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <p>Ava Sklar &middot; 2026</p>
+</footer>
+
+</body>
+</html>
