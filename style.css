@@ -498,8 +498,9 @@ footer {
         font-size: 0.8rem;
     }
 
-    .games-grid {
-        grid-template-columns: 1fr;
+    .games-grid,
+    .tutorials-grid {
+        grid-template-columns: 1fr !important;
     }
 
     .a11y-grid {
