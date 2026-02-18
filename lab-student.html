@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Lab – Building an Accessible Car Game with Python</title>
+<style>
+  @page {
+    size: letter;
+    margin: 1in 1in 1in 1in;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Arial', Helvetica, sans-serif;
+    font-size: 11pt;
+    line-height: 1.6;
+    color: #111;
+    background: white;
+  }
+
+  h1 {
+    font-size: 14pt;
+    font-weight: bold;
+    margin-bottom: 0.5em;
+  }
+
+  h2 {
+    font-size: 11.5pt;
+    font-weight: bold;
+    margin-top: 1.2em;
+    margin-bottom: 0.4em;
+  }
+
+  h3 {
+    font-size: 11pt;
+    font-weight: bold;
+    font-style: italic;
+    margin-top: 0.9em;
+    margin-bottom: 0.3em;
+  }
+
+  p {
+    margin-bottom: 0.65em;
+  }
+
+  ul, ol {
+    margin: 0.4em 0 0.75em 1.6em;
+  }
+
+  li {
+    margin-bottom: 0.3em;
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid #aaa;
+    margin: 1.2em 0;
+  }
+
+  code {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 9.5pt;
+    background: #f0f0f0;
+    padding: 0.1em 0.35em;
+    border-radius: 2px;
+  }
+
+  pre {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 9pt;
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+    padding: 0.75em 1em;
+    margin: 0.6em 0 0.9em 0;
+    white-space: pre-wrap;
+    line-height: 1.5;
+  }
+
+  pre code {
+    background: none;
+    padding: 0;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0.6em 0 0.9em 0;
+    font-size: 10pt;
+  }
+
+  th {
+    background: #e8e8e8;
+    font-weight: bold;
+    text-align: left;
+    padding: 0.45em 0.65em;
+    border: 1px solid #ccc;
+  }
+
+  td {
+    padding: 0.4em 0.65em;
+    border: 1px solid #ccc;
+    vertical-align: top;
+  }
+
+  /* Callout styles matching the lab's visual language */
+  .callout {
+    border-left: 3px solid #555;
+    background: #f9f9f9;
+    padding: 0.65em 1em;
+    margin: 0.75em 0;
+  }
+
+  .callout strong {
+    display: block;
+    margin-bottom: 0.3em;
+  }
+
+  .callout-tip {
+    border-left-color: #2563eb;
+    background: #eff6ff;
+  }
+
+  .callout-try {
+    border-left-color: #ea580c;
+    background: #fff7ed;
+  }
+
+  .callout-why {
+    border-left-color: #7c3aed;
+    background: #f5f3ff;
+  }
+
+  .callout-check {
+    border-left-color: #16a34a;
+    background: #f0fdf4;
+  }
+
+  .callout-stretch {
+    border-left-color: #0891b2;
+    background: #ecfeff;
+  }
+
+  .task-header {
+    font-weight: bold;
+    font-style: italic;
+    font-size: 11pt;
+    margin-top: 1.1em;
+    margin-bottom: 0.35em;
+  }
+
+  .part-title {
+    font-size: 11.5pt;
+    font-weight: bold;
+    margin-top: 1.3em;
+    margin-bottom: 0.4em;
+  }
+
+  .page-break {
+    page-break-before: always;
+  }
+
+  .vocab-table td:first-child {
+    font-weight: bold;
+    width: 120px;
+    white-space: nowrap;
+  }
+
+  .checklist li {
+    list-style: none;
+    padding-left: 0.2em;
+  }
+
+  .checklist li::before {
+    content: "☐ ";
+    font-size: 11pt;
+  }
+</style>
+</head>
+<body>
+
+<h1>Lab – Building an Accessible Car Game with Python</h1>
+
+<h2>Learning Goals</h2>
+<p>In this lab, you will build a car-dodging game in Python, then improve it so that <em>everyone</em> can play — including people with disabilities. By the end, you will be able to:</p>
+<ol>
+  <li>Set up Python and Pygame and run a basic program</li>
+  <li>Build a game with a moving player, moving enemies, and collision detection</li>
+  <li>Identify accessibility problems using a checklist</li>
+  <li>Add four features that make your game playable for more people</li>
+</ol>
+
+<p><strong>No coding experience is required to start.</strong> Every step is explained from scratch.</p>
+<p>All code goes in one file: <code>game.py</code></p>
+
+<hr>
+
+<h2>Before You Begin</h2>
+
+<h3>What You Need</h3>
+<ul>
+  <li>A computer with Python installed (ask your teacher if unsure)</li>
+  <li>A code editor — VS Code, IDLE, or whatever your class uses</li>
+  <li>Two image files: <code>Player.png</code> and <code>Enemy.png</code> (your teacher will provide these)</li>
+  <li>A sound file: <code>crash.wav</code> (provided)</li>
+  <li>A font file: <code>Atkinson-Hyperlegible-Regular-102.ttf</code> (provided, or download free at brailleinstitute.org/freefont)</li>
+</ul>
+
+<h3>Vocabulary</h3>
+<table class="vocab-table">
+  <tr><th>Word</th><th>What it means</th></tr>
+  <tr><td>Python</td><td>A programming language — it's the text you'll type to tell the computer what to do</td></tr>
+  <tr><td>Pygame</td><td>A free add-on for Python that makes it easy to build games with graphics and sound</td></tr>
+  <tr><td>FPS</td><td>Frames per second — how many times the screen redraws each second. Higher FPS = smoother and faster</td></tr>
+  <tr><td>Sprite</td><td>A game character or object (your car, the enemy car) shown as an image</td></tr>
+  <tr><td>Rect</td><td>Short for "rectangle" — an invisible box around your sprite used to track position and detect collisions</td></tr>
+  <tr><td>WCAG</td><td>Web Content Accessibility Guidelines — rules created by experts for making digital things usable by everyone</td></tr>
+  <tr><td>Contrast ratio</td><td>A number that says how easy two colors are to tell apart. Higher = easier to see</td></tr>
+  <tr><td>Accessibility</td><td>Designing things so people with different abilities can use them</td></tr>
+</table>
+
+<hr>
+
+<div class="part-title">Part I – Setting Up</div>
+
+<div class="task-header">Task 1 – Install Pygame</div>
+<p>Open your terminal (on Mac: search "Terminal"; on Windows: search "Command Prompt") and type exactly:</p>
+<pre>pip install pygame</pre>
+<p>You should see text appear and eventually a line saying it was installed successfully. You only need to do this once.</p>
+
+<div class="callout callout-tip">
+  <strong>What is pip?</strong>
+  <code>pip</code> is Python's package manager — it downloads and installs free add-ons (called packages) for Python. Pygame is a package.
+</div>
+
+<div class="task-header">Task 2 – Create your file and import tools</div>
+<p>Create a new file called <code>game.py</code>. Add these lines at the very top:</p>
+<pre>import pygame, sys
+from pygame.locals import *
+import random, time
+
+pygame.init()</pre>
+
+<div class="callout callout-tip">
+  <strong>What does this do?</strong>
+  <code>import pygame</code> loads the game-making tools. <code>pygame.init()</code> turns them on. Think of it like plugging in a game console (import) and pressing the power button (init). You need both steps every time.
+</div>
+
+<div class="task-header">Task 3 – Set up the game window</div>
+<p>Add these lines below your imports:</p>
+<pre># Speed settings
+normal_mode = 60    # Normal: 60 frames per second
+slow_mode   = 30    # Slow:   30 frames per second
+FPS = normal_mode
+FramePerSec = pygame.time.Clock()
+
+# Colors (3 numbers: Red, Green, Blue — each from 0 to 255)
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
+RED   = (255, 0, 0)
+
+# Game settings
+SCREEN_WIDTH  = 400
+SCREEN_HEIGHT = 600
+SPEED = 5
+SCORE = 0
+
+# Create the window
+DISPLAYSURF = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+DISPLAYSURF.fill(WHITE)
+pygame.display.set_caption("My Game")</pre>
+
+<div class="callout callout-tip">
+  <strong>Colors are just 3 numbers</strong>
+  Every color on screen mixes Red, Green, and Blue light. Each goes from 0 (none) to 255 (full). So <code>(255, 0, 0)</code> is pure red, <code>(0, 0, 0)</code> is black (no light at all), and <code>(255, 255, 255)</code> is white (all the light mixed together).
+</div>
+
+<hr>
+
+<div class="part-title">Part II – Building Your Characters</div>
+
+<div class="task-header">Task 4 – Create the Enemy class</div>
+<p>In games, we use <strong>classes</strong> to create characters. Think of a class like a <strong>cookie cutter</strong>: it's a template, and every character made from it has the same shape and behavior.</p>
+<p>Add this code below your setup:</p>
+<pre>class Enemy(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        self.image = pygame.image.load("Enemy.png")
+        self.rect  = self.image.get_rect()
+        # Start at a random spot at the top of the screen
+        self.rect.center = (random.randint(40, SCREEN_WIDTH-40), 0)
+
+    def move(self):
+        global SCORE
+        # Move down the screen
+        self.rect.move_ip(0, SPEED)
+        # If the enemy goes off the bottom, bring it back to the top
+        if self.rect.top > 600:
+            SCORE += 1
+            self.rect.top = 0
+            self.rect.center = (random.randint(40, SCREEN_WIDTH - 40), 0)</pre>
+
+<div class="callout callout-tip">
+  <strong>What's happening here?</strong>
+  <code>__init__</code> runs once when a new enemy is created — it loads the image and picks a random starting spot.
+  <code>move()</code> is called every frame to slide the enemy downward. When it exits the bottom, the score goes up and the enemy resets.
+</div>
+
+<div class="task-header">Task 5 – Create the Player class</div>
+<p>Add this class below the Enemy class:</p>
+<pre>class Player(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        self.image = pygame.image.load("Player.png")
+        self.rect  = self.image.get_rect()
+        self.rect.center = (160, 520)    # Near the bottom of the screen
+
+    def move(self):
+        pressed_keys = pygame.key.get_pressed()
+        # Move left (but don't go off screen)
+        if self.rect.left > 0:
+            if pressed_keys[K_LEFT]:
+                self.rect.move_ip(-5, 0)
+        # Move right (but don't go off screen)
+        if self.rect.right &lt; SCREEN_WIDTH:
+            if pressed_keys[K_RIGHT]:
+                self.rect.move_ip(5, 0)</pre>
+
+<div class="callout callout-tip">
+  <strong>What's a rect?</strong>
+  A rect (rectangle) is an invisible box around your character. The game uses it to know where the character is and to check whether two characters bumped into each other. You can't see it, but it's always there.
+</div>
+
+<hr class="page-break">
+
+<div class="part-title">Part III – Making It Run</div>
+
+<div class="task-header">Task 6 – Set up characters and groups</div>
+<p>Add this below your class definitions:</p>
+<pre>P1 = Player()    # Create one player
+E1 = Enemy()     # Create one enemy
+
+# Groups let us manage many sprites at once
+enemies     = pygame.sprite.Group()
+enemies.add(E1)
+all_sprites = pygame.sprite.Group()
+all_sprites.add(P1, E1)
+
+# Make the game get harder over time (every 1 second)
+INC_SPEED = pygame.USEREVENT + 1
+pygame.time.set_timer(INC_SPEED, 1000)</pre>
+
+<div class="task-header">Task 7 – Write the game loop</div>
+<p>The game loop is the heartbeat of your game. It runs over and over — 60 times per second — doing three things: <strong>check what happened → update everything → draw it on screen</strong>.</p>
+<p>Add this at the very bottom of your file:</p>
+<pre>while True:
+
+    # 1. CHECK WHAT HAPPENED (keyboard, quit button, etc.)
+    for event in pygame.event.get():
+        if event.type == INC_SPEED:
+            SPEED += 0.5               # Game gets faster every second!
+        if event.type == QUIT:
+            pygame.quit()
+            sys.exit()
+
+    # 2. CLEAR THE SCREEN AND MOVE EVERYTHING
+    DISPLAYSURF.fill(WHITE)
+    for entity in all_sprites:
+        entity.move()
+        DISPLAYSURF.blit(entity.image, entity.rect)
+
+    # 3. CHECK FOR CRASHES
+    if pygame.sprite.spritecollideany(P1, enemies):
+        DISPLAYSURF.fill(RED)
+        pygame.display.update()
+        for entity in all_sprites:
+            entity.kill()
+        time.sleep(2)
+        pygame.quit()
+        sys.exit()
+
+    # 4. SHOW THE FRAME AND WAIT
+    pygame.display.update()
+    FramePerSec.tick(FPS)</pre>
+
+<div class="callout callout-try">
+  <strong>Run it!</strong>
+  Save your file and run it with <code>python game.py</code>. You should see your car at the bottom and an enemy falling from the top. Use left and right arrow keys to dodge! The game gets faster every second.
+</div>
+
+<hr>
+
+<div class="part-title">Part IV – Finding Problems (Accessibility Audit)</div>
+
+<div class="task-header">Task 8 – Spot the accessibility problems</div>
+<p>Your game works — but it has serious problems that make it hard or impossible for some people to play:</p>
+<table>
+  <tr><th>Problem</th><th>Who it affects</th></tr>
+  <tr><td>Colors are hard to tell apart (low contrast)</td><td>People with low vision or color blindness</td></tr>
+  <tr><td>Score text is tiny and blends into the background</td><td>People with visual impairments</td></tr>
+  <tr><td>Only one speed — too fast for some players</td><td>People with motor or cognitive disabilities; beginners</td></tr>
+  <tr><td>No volume control for the crash sound</td><td>People with sensory sensitivities; people who are hard of hearing</td></tr>
+  <tr><td>Default font can be hard to read</td><td>People with dyslexia or low vision</td></tr>
+</table>
+
+<div class="task-header">Task 9 – Check the contrast using a tool</div>
+<p>Go to <strong>webaim.org/resources/contrastchecker</strong> in a browser.</p>
+<ol>
+  <li>In "Foreground Color," type the hex code for your score text color</li>
+  <li>In "Background Color," type the hex code for your background</li>
+  <li>Look at the contrast ratio. For text, we need at least <strong>4.5:1</strong>. For game objects, at least <strong>3:1</strong></li>
+  <li>If it says "Fail," try different colors until you find a pair that passes</li>
+</ol>
+
+<div class="callout callout-why">
+  <strong>Why does contrast matter?</strong>
+  About 1 in 12 men has color blindness. People with low vision or cataracts see colors as more washed-out. If your player car and the background are similar colors, some people literally cannot see your character on screen.
+</div>
+
+<div class="task-header">Task 10 – Complete the audit checklist</div>
+<p>Play your game and mark each item below:</p>
+<ul class="checklist">
+  <li>All game objects are clearly visible against the background (3:1 contrast or better)</li>
+  <li>The score text is easy to read (4.5:1 contrast or better)</li>
+  <li>The game has a way to slow down</li>
+  <li>The font is clear and readable</li>
+  <li>Players can control the volume</li>
+  <li>The game works using only the keyboard (no mouse needed)</li>
+  <li>It's obvious when the game ends and what the score was</li>
+</ul>
+<p>How many did you check off? The ones left unchecked are what you'll fix in Part V.</p>
+
+<hr class="page-break">
+
+<div class="part-title">Part V – Fixing Your Game</div>
+
+<div class="task-header">Task 11 – Fix 1: High-Contrast Colors and Visible Score</div>
+<p>Add your fonts at the top of the file (before the game loop), then update the drawing section inside the loop:</p>
+<pre># Load the accessible font (add this before the game loop)
+special     = "Atkinson-Hyperlegible-Regular-102.ttf"
+font        = pygame.font.Font(special, 60)
+font_medium = pygame.font.Font(special, 40)
+font_small  = pygame.font.Font(special, 20)
+
+# --- Inside the game loop, after DISPLAYSURF.blit(background, ...) ---
+# Draw a bright yellow box, then put the score on top of it
+scores = font.render(str(SCORE), True, BLACK)
+pygame.draw.rect(DISPLAYSURF, (255, 200, 0), (0, 0, 60, 65))
+DISPLAYSURF.blit(scores, (15, 15))</pre>
+
+<div class="callout callout-tip">
+  <strong>Why the yellow rectangle?</strong>
+  The yellow box goes behind the score number. No matter what color the road background is underneath, the score always appears on bright yellow — which gives very high contrast and is always readable.
+</div>
+
+<p>Also update your background and sprite images to use high-contrast colors. Dark backgrounds with bright or light-colored sprites work well. Test your new colors at webaim.org/resources/contrastchecker.</p>
+
+<div class="task-header">Task 12 – Fix 2: Add a Slow Mode</div>
+<p>Add one variable before the game loop, then add a spacebar check inside the event loop:</p>
+<pre># Add this before the while loop:
+mode_message_time = 0
+
+# Add this inside the "for event" section:
+if event.type == KEYDOWN:
+    if event.key == K_SPACE:
+        if FPS == normal_mode:
+            FPS = slow_mode
+        else:
+            FPS = normal_mode
+        mode_message_time = time.time()   # record when we toggled
+
+# Add this after drawing the score (shows message for 2 seconds):
+if time.time() - mode_message_time &lt; 2:
+    mode_text = "SLOW MODE" if FPS == slow_mode else "NORMAL MODE"
+    mode_msg  = font_medium.render(mode_text, True, BLACK)
+    rect      = mode_msg.get_rect(topleft=(110, 20))
+    pygame.draw.rect(DISPLAYSURF, (255, 200, 0), rect)
+    DISPLAYSURF.blit(mode_msg, rect)</pre>
+
+<div class="callout callout-tip">
+  <strong>How does slowing FPS slow the game?</strong>
+  At 60 FPS, the loop runs 60 times per second and moves things 60 times. At 30 FPS, everything moves only 30 times — literally half speed. The <code>time.time()</code> trick records when you pressed spacebar so the game can show a message for exactly 2 seconds afterward.
+</div>
+
+<div class="callout callout-why">
+  <strong>Who does slow mode help?</strong>
+  Players with motor disabilities who need more reaction time; players who process visual information more slowly; beginners practicing; children and older adults. Notice: slow mode helps <em>everyone</em> at some point — it's not only an "accessibility" feature, it's good game design.
+</div>
+
+<div class="task-header">Task 13 – Fix 3: Use an Accessible Font</div>
+<p>If you haven't already done this in Task 11, add your font setup before the game loop:</p>
+<pre>special     = "Atkinson-Hyperlegible-Regular-102.ttf"
+font        = pygame.font.Font(special, 60)
+font_medium = pygame.font.Font(special, 40)
+font_small  = pygame.font.Font(special, 20)
+game_over   = font.render("Game Over", True, BLACK)</pre>
+<p>Make sure the font file is in the same folder as <code>game.py</code>.</p>
+
+<div class="callout callout-why">
+  <strong>Why Atkinson Hyperlegible?</strong>
+  This font was designed by the Braille Institute specifically for people with low vision. It makes characters that normally look confusing — like capital I, lowercase l, and the number 1 — look clearly different from each other. It also has generous spacing between letters.
+  <br><br>
+  <strong>Fonts to avoid:</strong> pixelated fonts, cursive fonts, fonts with very thin strokes.
+</div>
+
+<div class="task-header">Task 14 – Fix 4: Let Players Control the Volume</div>
+<p>Add a volume variable at the top of your file, then update the Player's <code>move()</code> method and the collision code:</p>
+<pre># Add with your other variables at the top:
+volume_level = 0.5    # Start at 50%
+
+# Update the Player's move() method to include these lines:
+def move(self):
+    global volume_level
+    pressed_keys = pygame.key.get_pressed()
+
+    # Volume up (up arrow)
+    if pressed_keys[K_UP] and volume_level &lt; 1.0:
+        volume_level = min(volume_level + 0.1, 1.0)
+    # Volume down (down arrow)
+    if pressed_keys[K_DOWN] and volume_level &gt; 0.0:
+        volume_level = max(volume_level - 0.1, 0.0)
+
+    # Keep the left/right movement code below this...
+
+# Update the collision section to play sound at the user's volume:
+if pygame.sprite.spritecollideany(P1, enemies):
+    crash = pygame.mixer.Sound('crash.wav')
+    crash.set_volume(volume_level)
+    crash.play()
+    time.sleep(1)
+    # ... rest of game over code ...</pre>
+
+<div class="callout callout-tip">
+  <strong>What do min() and max() do?</strong>
+  <code>min(volume_level + 0.1, 1.0)</code> picks whichever value is smaller — so if volume somehow goes above 1.0, it gets capped back. <code>max()</code> does the opposite for the bottom. This keeps volume safely between 0.0 and 1.0 no matter how many times the player presses the button.
+</div>
+
+<hr>
+
+<div class="part-title">Part VI – Check Your Work</div>
+
+<div class="task-header">Task 15 – Final checklist</div>
+<p>Play your finished game and make sure everything works:</p>
+<ul class="checklist">
+  <li>The game launches and runs without errors</li>
+  <li>The player moves left and right with arrow keys</li>
+  <li>The score increases when you dodge an enemy</li>
+  <li>The game ends and shows "Game Over" when you crash</li>
+  <li>All game objects and text are easy to see (high contrast)</li>
+  <li>Pressing Spacebar switches between Normal and Slow mode</li>
+  <li>The mode name appears on screen for 2 seconds after switching</li>
+  <li>Up/Down arrows raise or lower the crash sound volume</li>
+  <li>The font is clear and readable (Atkinson Hyperlegible)</li>
+</ul>
+
+<div class="callout callout-check">
+  <strong>You're done! Here's what you built:</strong>
+  <ul>
+    <li>A working car-dodging game in Python</li>
+    <li>High-contrast visuals that are easy to see for people with low vision or color blindness</li>
+    <li>A slow mode that helps players who need more reaction time</li>
+    <li>An accessible font designed for low-vision readers</li>
+    <li>User-controlled volume for players with sensory sensitivities or hearing differences</li>
+  </ul>
+</div>
+
+<hr>
+
+<div class="part-title">Stretch Goal – Advanced Options</div>
+<p>If you've finished everything above and want to go further, try one of these:</p>
+
+<div class="task-header">Stretch Task A – Color-Blind Mode with Shapes</div>
+<p>Some players can't distinguish colors even with high contrast. Add a mode that puts a unique shape on each type of object (e.g., a circle on the player, a triangle on enemies) so players can tell them apart by shape, not just color.</p>
+<pre># Example: draw a circle on top of the player sprite
+pygame.draw.circle(DISPLAYSURF, WHITE, P1.rect.center, 10)</pre>
+<p>Research: Look up <code>pygame.draw.circle</code>, <code>pygame.draw.polygon</code>, and <code>pygame.draw.rect</code> in the Pygame docs (pygame.org/docs) to find the drawing functions you need.</p>
+
+<div class="task-header">Stretch Task B – Screen Reader Announcements</div>
+<p>People who are blind use screen readers to hear what's on the screen. The <code>pyttsx3</code> library lets your game speak text out loud.</p>
+<pre>pip install pyttsx3</pre>
+<pre>import pyttsx3
+engine = pyttsx3.init()
+
+# Announce the score when it changes:
+engine.say(f"Score: {SCORE}")
+engine.runAndWait()
+
+# Announce game over:
+engine.say("Game over")
+engine.runAndWait()</pre>
+<p>Challenge: only announce the score when it changes (not every frame), and test that the announcement timing doesn't interrupt gameplay.</p>
+
+<div class="task-header">Stretch Task C – Remappable Controls</div>
+<p>Not everyone can use the standard arrow keys. Add a setup screen at the beginning that lets players press any key to assign it as their "move left" or "move right" button.</p>
+<pre># Example structure:
+print("Press the key you want to use for MOVE LEFT:")
+# Wait for a keypress, store it
+left_key = wait_for_keypress()
+
+print("Press the key you want to use for MOVE RIGHT:")
+right_key = wait_for_keypress()</pre>
+<p>Research: Look up <code>pygame.event.wait()</code> and <code>event.key</code> to figure out how to capture a keypress and store it as a variable.</p>
+
+<div class="callout callout-why">
+  <strong>The big takeaway</strong>
+  Accessibility isn't about making a separate "special" version of your game. It's about making one game that works for as many people as possible. Every feature you added — slow mode, volume control, readable font, high contrast — makes the game better for all players, not just disabled ones. That's what good design looks like.
+</div>
+
+<hr>
+
+<h2>Resources</h2>
+<ul>
+  <li><strong>WebAIM Contrast Checker:</strong> webaim.org/resources/contrastchecker</li>
+  <li><strong>Atkinson Hyperlegible Font (free):</strong> brailleinstitute.org/freefont</li>
+  <li><strong>Pygame Documentation:</strong> pygame.org/docs</li>
+  <li><strong>WCAG Quick Reference:</strong> w3.org/WAI/WCAG21/quickref</li>
+</ul>
+
+<p style="margin-top:1.5em; font-size:9.5pt; color:#555;">Created by Ava Sklar &middot; Bucknell University &middot; 2026</p>
+
+</body>
+</html>

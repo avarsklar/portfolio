@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Lab – Teaching Accessible Pygame: Instructor Guide</title>
+<style>
+  @page {
+    size: letter;
+    margin: 1in 1in 1in 1in;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Arial', Helvetica, sans-serif;
+    font-size: 11pt;
+    line-height: 1.55;
+    color: #111;
+    background: white;
+  }
+
+  h1 {
+    font-size: 14pt;
+    font-weight: bold;
+    margin-bottom: 1em;
+  }
+
+  h2 {
+    font-size: 11.5pt;
+    font-weight: bold;
+    margin-top: 1.2em;
+    margin-bottom: 0.4em;
+  }
+
+  h3 {
+    font-size: 11pt;
+    font-weight: bold;
+    font-style: italic;
+    margin-top: 1em;
+    margin-bottom: 0.3em;
+    color: #222;
+  }
+
+  p {
+    margin-bottom: 0.6em;
+  }
+
+  ul, ol {
+    margin: 0.4em 0 0.7em 1.5em;
+  }
+
+  li {
+    margin-bottom: 0.25em;
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid #aaa;
+    margin: 1.2em 0;
+  }
+
+  code {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 9.5pt;
+    background: #f0f0f0;
+    padding: 0.1em 0.3em;
+    border-radius: 2px;
+  }
+
+  pre {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 9pt;
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+    padding: 0.75em 1em;
+    margin: 0.6em 0 0.9em 0;
+    white-space: pre-wrap;
+    line-height: 1.5;
+  }
+
+  pre code {
+    background: none;
+    padding: 0;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0.6em 0 0.9em 0;
+    font-size: 10pt;
+  }
+
+  th {
+    background: #e8e8e8;
+    font-weight: bold;
+    text-align: left;
+    padding: 0.45em 0.6em;
+    border: 1px solid #ccc;
+  }
+
+  td {
+    padding: 0.4em 0.6em;
+    border: 1px solid #ccc;
+    vertical-align: top;
+  }
+
+  .callout {
+    border-left: 3px solid #555;
+    background: #f9f9f9;
+    padding: 0.6em 0.9em;
+    margin: 0.7em 0;
+  }
+
+  .callout strong {
+    display: block;
+    margin-bottom: 0.3em;
+  }
+
+  .task-header {
+    font-weight: bold;
+    font-style: italic;
+    font-size: 11pt;
+    margin-top: 1.1em;
+    margin-bottom: 0.35em;
+  }
+
+  .part-title {
+    font-size: 11.5pt;
+    font-weight: bold;
+    margin-top: 1.3em;
+    margin-bottom: 0.4em;
+  }
+
+  .timeline-table td:first-child {
+    width: 90px;
+    font-weight: bold;
+    white-space: nowrap;
+    color: #333;
+  }
+
+  .page-break {
+    page-break-before: always;
+  }
+</style>
+</head>
+<body>
+
+<h1>Lab – Teaching Accessible Pygame: Instructor Guide</h1>
+
+<h2>Learning Goals</h2>
+<p>This guide supports CS instructors in teaching accessibility principles through game development. After using this module, instructors will be able to:</p>
+<ol>
+  <li>Lead students through building a working Pygame car-dodging game over 3–4 class sessions</li>
+  <li>Facilitate a structured accessibility audit using WCAG AA criteria</li>
+  <li>Guide students to implement four concrete accessibility features in their game</li>
+  <li>Assess student work using the provided rubric and lead reflection discussions</li>
+</ol>
+<p>No prior accessibility background is required. WCAG references are provided in context throughout the guide.</p>
+
+<hr>
+
+<h2>Accessibility Context for Instructors</h2>
+<p>The <strong>Web Content Accessibility Guidelines (WCAG) 2.1 AA</strong> are the internationally recognized standard for digital accessibility, developed by the W3C Web Accessibility Initiative. While designed for web content, the four core principles — Perceivable, Operable, Understandable, Robust (POUR) — apply directly to games.</p>
+
+<p>This module focuses on four WCAG-grounded features that are both teachable in introductory CS and genuinely impactful:</p>
+
+<table>
+  <tr><th>Feature</th><th>WCAG Criterion</th><th>Who it helps</th></tr>
+  <tr><td>High-contrast colors</td><td>1.4.3 (text, 4.5:1), 1.4.11 (objects, 3:1)</td><td>Low vision, color blindness</td></tr>
+  <tr><td>Adjustable speed (slow mode)</td><td>2.2.1 Timing Adjustable</td><td>Motor disabilities, cognitive disabilities, newcomers</td></tr>
+  <tr><td>Readable font (Atkinson Hyperlegible)</td><td>1.4.12 Text Spacing</td><td>Dyslexia, low vision</td></tr>
+  <tr><td>User-controlled volume</td><td>1.4.2 Audio Control</td><td>Sensory sensitivities (e.g., autism), hearing differences</td></tr>
+</table>
+
+<div class="callout">
+  <strong>Instructor Note: Universal Design Framing</strong>
+  Every accessibility feature in this lab also benefits non-disabled users: slow mode helps beginners, volume control helps anyone in a noisy environment, high contrast helps in bright lighting. Frame accessibility as good design, not accommodation.
+</div>
+
+<hr>
+
+<h2>Prerequisites &amp; Setup</h2>
+
+<h3>Student Prerequisites</h3>
+<ul>
+  <li>Basic Python: variables, functions, loops, conditionals</li>
+  <li>Familiarity with classes is helpful but not required (Lesson 2 introduces OOP gently)</li>
+  <li>No prior Pygame or game development experience needed</li>
+</ul>
+
+<h3>Environment Setup</h3>
+<p>Students install Pygame with:</p>
+<pre>pip install pygame</pre>
+
+<h3>Required Assets</h3>
+<ul>
+  <li><code>Player.png</code> and <code>Enemy.png</code> — provided in the starter kit, or students create colored rectangles</li>
+  <li><code>crash.wav</code> — a short sound file for collision feedback</li>
+  <li><code>Atkinson-Hyperlegible-Regular-102.ttf</code> — downloadable free from brailleinstitute.org/freefont</li>
+  <li>A road background image (optional; a solid dark rectangle works fine)</li>
+</ul>
+
+<div class="callout">
+  <strong>Tip: Distribute a starter kit</strong>
+  Consider providing a zip file with the base (inaccessible) game already running and all assets included. This focuses Lessons 3–4 on the audit and fixes rather than debugging asset paths.
+</div>
+
+<hr>
+
+<h2>Module Structure</h2>
+<table>
+  <tr><th>Session</th><th>Topic</th><th>Key Concepts</th></tr>
+  <tr><td>Lesson 1</td><td>Pygame Foundations</td><td>Game loop, display surface, FPS, RGB colors, coordinate system</td></tr>
+  <tr><td>Lesson 2</td><td>Building the Game</td><td>OOP with sprites, collision detection, custom events, scoring</td></tr>
+  <tr><td>Lesson 3</td><td>Accessibility Audit</td><td>WCAG POUR principles, contrast ratios, sensory and cognitive needs</td></tr>
+  <tr><td>Lesson 4</td><td>Implementing Fixes</td><td>High contrast, speed modes, readable fonts, volume control</td></tr>
+</table>
+
+<hr>
+
+<div class="part-title">Part I – Lesson 1: Pygame Foundations &amp; the Game Loop</div>
+
+<h3>Suggested Timeline (50 min)</h3>
+<table class="timeline-table">
+  <tr><td>0–10 min</td><td><strong>Warm-up:</strong> Ask students to name a game they enjoy. "What would happen if you couldn't see the colors clearly? What if the game was too fast for you to react?" Record responses — they will surface naturally as fixes in Lessons 3–4.</td></tr>
+  <tr><td>10–20 min</td><td><strong>Lecture:</strong> Introduce Pygame — importing, initializing, the display surface, RGB color model.</td></tr>
+  <tr><td>20–35 min</td><td><strong>Live code:</strong> Build the game loop together. Explain FPS, demonstrate the coordinate system (origin top-left, y increases downward).</td></tr>
+  <tr><td>35–45 min</td><td><strong>Hands-on:</strong> Students create a window, set a background color, display a rectangle that moves.</td></tr>
+  <tr><td>45–50 min</td><td><strong>Wrap-up:</strong> Preview the OOP approach for Lesson 2.</td></tr>
+</table>
+
+<div class="task-header">Task 1 – Initializing Pygame</div>
+<p>Have students create <code>game.py</code> and type these lines to start the engine:</p>
+<pre>import pygame, sys, random, time
+from pygame.locals import *
+
+pygame.init()</pre>
+<p>Explain: <code>pygame.init()</code> starts all subsystems (display, sound, etc.) and must come before any other Pygame call. The <code>pygame.locals</code> import provides constants like <code>QUIT</code>, <code>K_LEFT</code>, <code>K_SPACE</code>.</p>
+
+<div class="task-header">Task 2 – The Game Window and FPS</div>
+<pre>normal_mode = 60    # Standard speed: 60 frames per second
+slow_mode   = 30    # Half speed: 30 frames per second
+FPS = normal_mode
+FramePerSec = pygame.time.Clock()
+
+SCREEN_WIDTH  = 400
+SCREEN_HEIGHT = 600
+SPEED = 5
+SCORE = 0
+
+DISPLAYSURF = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+pygame.display.set_caption("Accessible Car Game")</pre>
+
+<div class="task-header">Task 3 – The Game Loop</div>
+<pre>while True:
+    for event in pygame.event.get():
+        if event.type == QUIT:
+            pygame.quit()
+            sys.exit()
+
+    # Game logic here
+
+    pygame.display.update()
+    FramePerSec.tick(FPS)</pre>
+<p>The three phases of every game loop: <strong>Handle events → Update state → Render</strong>. <code>FramePerSec.tick(FPS)</code> limits execution to FPS iterations per second, giving consistent speed across machines.</p>
+
+<div class="callout">
+  <strong>Discussion Prompt</strong>
+  "What would happen if we removed the <code>tick(FPS)</code> line? Why might different players need different speeds?" This seeds the slow mode conversation for Lesson 4.
+</div>
+
+<hr>
+
+<div class="part-title">Part II – Lesson 2: Building the Game — Sprites, Classes &amp; Collision</div>
+
+<h3>Suggested Timeline (50 min)</h3>
+<table class="timeline-table">
+  <tr><td>0–10 min</td><td><strong>Review:</strong> Quick recap of the game loop from Lesson 1.</td></tr>
+  <tr><td>10–25 min</td><td><strong>Lecture + live code:</strong> Introduce OOP through the Player and Enemy classes. Frame classes as "blueprints."</td></tr>
+  <tr><td>25–40 min</td><td><strong>Hands-on:</strong> Students implement sprite groups, collision detection, and the scoring system.</td></tr>
+  <tr><td>40–50 min</td><td><strong>Demo &amp; discussion:</strong> Play the completed (inaccessible) game. Ask students to identify barriers.</td></tr>
+</table>
+
+<div class="task-header">Task 4 – The Enemy Class</div>
+<pre>class Enemy(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        self.image = pygame.image.load("Enemy.png")
+        self.rect  = self.image.get_rect()
+        self.rect.center = (random.randint(40, SCREEN_WIDTH-40), 0)
+
+    def move(self):
+        global SCORE
+        self.rect.move_ip(0, SPEED)
+        if self.rect.top > 600:
+            SCORE += 1
+            self.rect.top = 0
+            self.rect.center = (random.randint(40, SCREEN_WIDTH - 40), 0)</pre>
+
+<div class="callout">
+  <strong>Teaching Note: OOP for Beginners</strong>
+  Frame it as a "blueprint": the Enemy class is the template; <code>E1 = Enemy()</code> creates one actual enemy from it. <code>self</code> means "this specific enemy." <code>__init__</code> runs once when the enemy is created. <code>move()</code> is an action the enemy can perform.
+</div>
+
+<div class="task-header">Task 5 – The Player Class</div>
+<pre>class Player(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        self.image = pygame.image.load("Player.png")
+        self.rect  = self.image.get_rect()
+        self.rect.center = (160, 520)
+
+    def move(self):
+        pressed_keys = pygame.key.get_pressed()
+        if self.rect.left > 0:
+            if pressed_keys[K_LEFT]:
+                self.rect.move_ip(-5, 0)
+        if self.rect.right < SCREEN_WIDTH:
+            if pressed_keys[K_RIGHT]:
+                self.rect.move_ip(5, 0)</pre>
+
+<div class="task-header">Task 6 – Sprite Groups, Collision Detection, and Increasing Difficulty</div>
+<pre>P1 = Player()
+E1 = Enemy()
+
+enemies     = pygame.sprite.Group()
+enemies.add(E1)
+all_sprites = pygame.sprite.Group()
+all_sprites.add(P1, E1)
+
+INC_SPEED = pygame.USEREVENT + 1
+pygame.time.set_timer(INC_SPEED, 1000)   # fire every 1 second
+
+# --- Inside the game loop ---
+for event in pygame.event.get():
+    if event.type == INC_SPEED:
+        SPEED += 0.5
+
+for entity in all_sprites:
+    entity.move()
+    DISPLAYSURF.blit(entity.image, entity.rect)
+
+if pygame.sprite.spritecollideany(P1, enemies):
+    # collision = game over</pre>
+
+<div class="callout">
+  <strong>End-of-Lesson Discussion</strong>
+  Have students play the inaccessible game, then discuss: "Can you read the score easily? What if you were color blind — can you tell the player from the background? What if the game moves too fast to react? What if the crash sound is too loud?" Record their answers. These become the fix list for Lessons 3–4.
+</div>
+
+<hr class="page-break">
+
+<div class="part-title">Part III – Lesson 3: Accessibility Audit — Applying WCAG to Games</div>
+
+<h3>Suggested Timeline (50 min)</h3>
+<table class="timeline-table">
+  <tr><td>0–15 min</td><td><strong>Lecture:</strong> Introduction to WCAG AA. What is accessibility? Who benefits? The POUR framework.</td></tr>
+  <tr><td>15–30 min</td><td><strong>Activity:</strong> Students audit the game using the WCAG checklist below.</td></tr>
+  <tr><td>30–40 min</td><td><strong>Group work:</strong> Teams present findings and propose solutions.</td></tr>
+  <tr><td>40–50 min</td><td><strong>Planning:</strong> Each student creates a prioritized fix list for Lesson 4.</td></tr>
+</table>
+
+<div class="task-header">Task 7 – Introduction to WCAG for Games</div>
+<p>Present the four WCAG principles and their game equivalents:</p>
+<table>
+  <tr><th>WCAG Principle</th><th>Game Application</th></tr>
+  <tr><td><strong>Perceivable</strong></td><td>Can players see/hear all important game elements? Are colors distinguishable without relying on hue alone?</td></tr>
+  <tr><td><strong>Operable</strong></td><td>Can players control the game effectively? Is the speed manageable for users with different reaction times?</td></tr>
+  <tr><td><strong>Understandable</strong></td><td>Is text readable? Are game states (score, game over, mode changes) clearly communicated?</td></tr>
+  <tr><td><strong>Robust</strong></td><td>Does the game work with different input methods and configurations?</td></tr>
+</table>
+
+<div class="task-header">Task 8 – Contrast Audit Activity</div>
+<p>Have students use WebAIM's Contrast Checker (webaim.org/resources/contrastchecker) to evaluate the original game colors. Example failures in the inaccessible version:</p>
+<ul>
+  <li>Grey road (#808080) vs. white lane lines (#FFFFFF) → <strong>1.86:1</strong> (fails 3:1 minimum for objects)</li>
+  <li>Grey road vs. yellow lane lines (#FFFF00) → <strong>1.49:1</strong> (fails)</li>
+  <li>Grey road vs. blue car (#0000FF) → <strong>1.07:1</strong> (fails — nearly invisible)</li>
+</ul>
+<p>Students then find accessible alternatives that pass 3:1 for game objects and 4.5:1 for text.</p>
+
+<div class="task-header">Task 9 – Full WCAG Audit Checklist</div>
+<table>
+  <tr><th>Category</th><th>Audit Question</th><th>WCAG Criterion</th></tr>
+  <tr><td>Contrast</td><td>Do all game objects meet at least 3:1 contrast against the background?</td><td>1.4.11</td></tr>
+  <tr><td>Contrast</td><td>Does all score/UI text meet at least 4.5:1 contrast?</td><td>1.4.3</td></tr>
+  <tr><td>Speed</td><td>Can players adjust game speed to suit their needs?</td><td>2.2.1</td></tr>
+  <tr><td>Font</td><td>Is the font readable with distinct characters (I vs. l vs. 1)?</td><td>1.4.12</td></tr>
+  <tr><td>Sound</td><td>Can users independently control audio volume?</td><td>1.4.2</td></tr>
+  <tr><td>Motion</td><td>Are there flashing elements faster than 3 per second?</td><td>2.3.1</td></tr>
+  <tr><td>Input</td><td>Is the entire game playable with keyboard only?</td><td>2.1.1</td></tr>
+  <tr><td>Feedback</td><td>Are game states (score, game over, mode change) clearly communicated?</td><td>3.3.1</td></tr>
+</table>
+
+<hr>
+
+<div class="part-title">Part IV – Lesson 4: Implementing Accessible Features</div>
+
+<h3>Suggested Timeline (50 min)</h3>
+<table class="timeline-table">
+  <tr><td>0–5 min</td><td><strong>Review:</strong> Share audit findings. Prioritize the fix list.</td></tr>
+  <tr><td>5–40 min</td><td><strong>Hands-on coding:</strong> Students implement fixes using the guided implementations below.</td></tr>
+  <tr><td>40–50 min</td><td><strong>Showcase:</strong> Side-by-side before/after comparison. Reflection discussion.</td></tr>
+</table>
+
+<div class="task-header">Task 10 – Fix 1: High-Contrast Colors and Score Display</div>
+<p><em>Before:</em> Grey background, score text blending into the road, low-contrast car colors.</p>
+<p><em>After:</em> Dark background, bold score on a yellow rectangle, high-contrast sprites.</p>
+<pre>DISPLAYSURF.blit(background, (0, 0))
+
+# Yellow backing box guarantees contrast regardless of background image
+scores = font.render(str(SCORE), True, BLACK)
+pygame.draw.rect(DISPLAYSURF, (255, 200, 0), (0, 0, 60, 65))
+DISPLAYSURF.blit(scores, (15, 15))</pre>
+<p>The yellow rectangle behind the score provides a guaranteed high-contrast surface that is independent of whatever background image is rendered beneath it.</p>
+
+<div class="task-header">Task 11 – Fix 2: Adjustable Speed (Slow Mode)</div>
+<pre># Before the game loop:
+mode_message_time = 0
+
+# Inside the event loop:
+if event.type == KEYDOWN:
+    if event.key == K_SPACE:
+        FPS = slow_mode if FPS == normal_mode else normal_mode
+        mode_message_time = time.time()
+
+# After drawing the score (show for 2 seconds after toggle):
+if time.time() - mode_message_time &lt; 2:
+    mode_text = "SLOW MODE" if FPS == slow_mode else "NORMAL MODE"
+    mode_msg  = font_medium.render(mode_text, True, BLACK)
+    rect      = mode_msg.get_rect(topleft=(110, 20))
+    pygame.draw.rect(DISPLAYSURF, (255, 200, 0), rect)
+    DISPLAYSURF.blit(mode_msg, rect)</pre>
+
+<div class="callout">
+  <strong>Discussion: Who Benefits from Slow Mode?</strong>
+  Players with motor disabilities who need more reaction time; players with cognitive disabilities who process visual information more slowly; new players learning the game; children and elderly players. Key insight: accessible features benefit everyone, not only disabled users.
+</div>
+
+<div class="task-header">Task 12 – Fix 3: Accessible Font (Atkinson Hyperlegible)</div>
+<pre># Download from brailleinstitute.org/freefont, place .ttf in game folder
+special     = "Atkinson-Hyperlegible-Regular-102.ttf"
+
+font        = pygame.font.Font(special, 60)   # Large: "Game Over"
+font_medium = pygame.font.Font(special, 40)   # Medium: mode display
+font_small  = pygame.font.Font(special, 20)   # Small: labels
+game_over   = font.render("Game Over", True, BLACK)</pre>
+<p>Atkinson Hyperlegible was designed by the Braille Institute for low-vision readers. It provides distinct letterforms (e.g., clear difference between capital I, lowercase l, and numeral 1), generous spacing, and open counters.</p>
+
+<div class="callout">
+  <strong>Teaching Note: Font Choice Criteria</strong>
+  Avoid pixelated/bitmap fonts, cursive or script fonts, and fonts with thin strokes. Recommended accessible fonts: Atkinson Hyperlegible, Verdana, Arial. WCAG 1.4.12 addresses text spacing and readability.
+</div>
+
+<div class="task-header">Task 13 – Fix 4: Volume Control</div>
+<pre># Top of file, with other variables:
+volume_level = 0.5    # Default 50%
+
+# In Player.move() — up/down arrows adjust volume:
+def move(self):
+    global volume_level
+    pressed_keys = pygame.key.get_pressed()
+
+    if pressed_keys[K_UP] and volume_level &lt; 1.0:
+        volume_level = min(volume_level + 0.1, 1.0)
+    if pressed_keys[K_DOWN] and volume_level &gt; 0.0:
+        volume_level = max(volume_level - 0.1, 0.0)
+
+    # Left/right movement unchanged...
+
+# On collision:
+crash = pygame.mixer.Sound('crash.wav')
+crash.set_volume(volume_level)
+crash.play()</pre>
+<p>People with sensory sensitivities (common in autism spectrum conditions) may find sudden loud sounds distressing. People who are hard of hearing may need higher volume. User-controlled audio is both a WCAG requirement and a UX best practice.</p>
+
+<hr>
+
+<div class="part-title">Part V – Assessment &amp; Extension Activities</div>
+
+<h2>Assessment Rubric</h2>
+<table>
+  <tr><th>Criterion</th><th>Excellent (A)</th><th>Proficient (B)</th><th>Developing (C)</th></tr>
+  <tr><td>Working game</td><td>Runs without errors; all features functional</td><td>Runs with minor issues</td><td>Significant bugs prevent play</td></tr>
+  <tr><td>Contrast fixes</td><td>All elements pass WCAG AA ratios; documented contrast checks</td><td>Most elements pass</td><td>Some improvements made</td></tr>
+  <tr><td>Speed mode</td><td>Toggle works; mode shown on screen; smooth transition</td><td>Toggle works</td><td>Attempted but buggy</td></tr>
+  <tr><td>Font &amp; readability</td><td>Accessible font; appropriate sizing; high-contrast text</td><td>Font changed; sizing adequate</td><td>Default font unchanged</td></tr>
+  <tr><td>Volume control</td><td>User-controllable; clamped to [0.0, 1.0]; applied at play time</td><td>Volume control works</td><td>Sound plays but no control</td></tr>
+  <tr><td>Written reflection</td><td>Articulates who each fix helps and why; references WCAG</td><td>Basic reflection with examples</td><td>Minimal or generic reflection</td></tr>
+</table>
+
+<h2>Extension Activities</h2>
+<ul>
+  <li><strong>Screen reader support:</strong> Add text-to-speech score announcements using the <code>pyttsx3</code> library</li>
+  <li><strong>Color-blind mode:</strong> Implement shape/pattern differentiation so game objects are distinguishable without relying on color alone</li>
+  <li><strong>Remappable controls:</strong> Let players assign their own key bindings at startup</li>
+  <li><strong>Audit another game:</strong> Have students apply the WCAG checklist to a classmate's project or a commercial game</li>
+  <li><strong>Research project:</strong> Compare WCAG to the Game Accessibility Guidelines (gameaccessibilityguidelines.com)</li>
+</ul>
+
+<hr>
+
+<h2>Resources &amp; References</h2>
+<ul>
+  <li><strong>WCAG 2.1 AA Quick Reference:</strong> w3.org/WAI/WCAG21/quickref</li>
+  <li><strong>WebAIM Contrast Checker:</strong> webaim.org/resources/contrastchecker</li>
+  <li><strong>Atkinson Hyperlegible Font:</strong> brailleinstitute.org/freefont</li>
+  <li><strong>Game Accessibility Guidelines:</strong> gameaccessibilityguidelines.com</li>
+  <li><strong>Pygame Documentation:</strong> pygame.org/docs</li>
+  <li><strong>W3C WAI Introduction to WCAG:</strong> w3.org/WAI/standards-guidelines/wcag</li>
+</ul>
+
+<p style="margin-top:1.5em; font-size:9.5pt; color:#555;">Created by Ava Sklar &middot; Bucknell University &middot; 2026</p>
+
+</body>
+</html>
