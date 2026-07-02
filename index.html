@@ -1,310 +1,1070 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ava Sklar | Portfolio</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Ava Sklar — Portfolio</title>
+<meta name="description" content="Ava Sklar — an AI-native product builder and PM. Founder of Bucknell Refit, builder of apps in beta and data analytics, with a psychology background and a bias for shipping." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..800&family=Fraunces:ital,opsz,wght@0,9..144,400..600;1,9..144,400..500&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+
+<style>
+  /* ============ TOKENS ============ */
+  :root {
+    --sand: #f4efe6;
+    --sand-deep: #eae2d4;
+    --sand-2: #ece4d6;
+    --bone: #fbf8f2;
+    --ink: #191714;
+    --ink-soft: #2e2a24;
+    --muted: #5a5047;
+    --line: #d8cfbe;
+    --accent: #ff4d2e;      /* electric vermilion */
+    --accent-deep: #e13a1e;
+    --olive: #4c5236;       /* supporting deep olive */
+    --olive-soft: #6f764f;
+
+    --display: "Bricolage Grotesque", sans-serif;
+    --serif: "Fraunces", Georgia, serif;
+    --body: "Newsreader", Georgia, serif;
+    --mono: "Space Mono", ui-monospace, monospace;
+
+    --maxw: 1200px;
+    --gutter: clamp(1.25rem, 4vw, 4rem);
+    --r: 18px;
+
+    --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; overflow-x: hidden; }
+
+  body {
+    margin: 0;
+    background: var(--sand);
+    color: var(--ink);
+    font-family: var(--body);
+    font-size: clamp(1rem, 0.95rem + 0.3vw, 1.15rem);
+    line-height: 1.6;
+    font-optical-sizing: auto;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+
+  /* grain / paper texture overlay */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0.5;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E");
+  }
+
+  a { color: inherit; }
+  img, video { display: block; max-width: 100%; }
+
+  ::selection { background: var(--accent); color: var(--bone); }
+
+  /* ============ SKIP LINK ============ */
+  .skip {
+    position: absolute;
+    left: 1rem;
+    top: -100px;
+    z-index: 200;
+    background: var(--ink);
+    color: var(--bone);
+    padding: 0.75rem 1.15rem;
+    border-radius: 999px;
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    text-decoration: none;
+    transition: top 0.2s var(--ease);
+  }
+  .skip:focus,
+  .skip:focus-visible { top: 1rem; }
+
+  /* ============ FOCUS ============ */
+  a:focus-visible,
+  button:focus-visible,
+  video:focus-visible,
+  [tabindex]:focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  /* ============ LAYOUT ============ */
+  .wrap {
+    width: 100%;
+    max-width: var(--maxw);
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+    position: relative;
+    z-index: 2;
+  }
+
+  section { position: relative; z-index: 2; }
+
+  /* ============ HEADER / NAV ============ */
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: color-mix(in srgb, var(--sand) 82%, transparent);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-block: 0.85rem;
+  }
+  .brand {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 1.1rem;
+    letter-spacing: -0.02em;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+  }
+  .brand .dot {
+    width: 0.7rem; height: 0.7rem;
+    background: var(--accent);
+    border-radius: 50%;
+    display: inline-block;
+    flex: none;
+  }
+  .nav-links {
+    display: flex;
+    gap: 0.35rem;
+    align-items: center;
+  }
+  .nav-links a {
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    text-decoration: none;
+    padding: 0.7rem 0.85rem;
+    border-radius: 999px;
+    color: var(--ink-soft);
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    transition: background 0.25s var(--ease), color 0.25s var(--ease);
+  }
+  .nav-links a:hover { background: var(--ink); color: var(--bone); }
+  .nav-desktop { display: none; }
+
+  .nav-cta {
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    text-decoration: none;
+    padding: 0.7rem 1.1rem;
+    border-radius: 999px;
+    background: var(--accent);
+    color: var(--bone);
+    border: 1px solid var(--accent);
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    transition: transform 0.25s var(--ease), background 0.25s var(--ease);
+  }
+  .nav-cta:hover { background: var(--accent-deep); transform: translateY(-2px); }
+
+  @media (min-width: 760px) {
+    .nav-desktop { display: flex; }
+  }
+
+  /* ============ HERO ============ */
+  .hero { padding-top: clamp(2.5rem, 6vw, 4.5rem); padding-bottom: clamp(2rem, 4vw, 3rem); }
+
+  .hero-eyebrow {
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--ink-soft);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin: 0 0 1.4rem;
+  }
+  .hero-eyebrow::before {
+    content: "";
+    width: 2.4rem; height: 2px;
+    background: var(--accent);
+    display: inline-block;
+  }
+
+  .hero-title {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(2.9rem, 10.5vw, 8.4rem);
+    line-height: 0.92;
+    letter-spacing: -0.035em;
+    margin: 0;
+    font-variation-settings: "opsz" 96;
+  }
+  .hero-title .line { display: block; }
+  .hero-title em {
+    font-style: normal;
+    font-family: var(--serif);
+    font-weight: 400;
+    font-variation-settings: "opsz" 120;
+    color: var(--accent);
+    letter-spacing: -0.01em;
+  }
+
+  .hero-lower {
+    display: grid;
+    gap: clamp(1.5rem, 4vw, 3rem);
+    margin-top: clamp(2rem, 4vw, 2.8rem);
+    align-items: end;
+  }
+  @media (min-width: 900px) {
+    .hero-lower { grid-template-columns: 1.35fr 1fr; }
+  }
+
+  .hero-lede {
+    font-size: clamp(1.12rem, 1rem + 0.6vw, 1.45rem);
+    line-height: 1.5;
+    max-width: 34ch;
+    margin: 0;
+    color: var(--ink-soft);
+  }
+  .hero-lede strong { font-weight: 600; color: var(--ink); }
+  .hero-lede .hl { color: var(--ink); font-weight: 700; text-decoration: underline; text-decoration-color: var(--accent); text-underline-offset: 3px; }
+
+  .hero-figure {
+    position: relative;
+    justify-self: end;
+    width: min(100%, 320px);
+  }
+  .hero-figure img {
+    width: 100%;
+    border-radius: var(--r);
+    filter: grayscale(0.15) contrast(1.03);
+    border: 1px solid var(--line);
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    object-position: center 20%;
+  }
+  .hero-figure .badge {
+    position: absolute;
+    left: max(-14px, -4%);
+    bottom: -14px;
+    background: var(--olive);
+    color: var(--bone);
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+    padding: 0.5rem 0.85rem;
+    border-radius: 999px;
+    box-shadow: 0 10px 30px -12px rgba(25,23,20,0.5);
+    white-space: nowrap;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin-top: 1.7rem;
+  }
+  .btn {
+    font-family: var(--mono);
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    text-decoration: none;
+    padding: 0.85rem 1.3rem;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    transition: transform 0.25s var(--ease), background 0.25s var(--ease), color 0.25s var(--ease);
+    border: 1.5px solid var(--ink);
+  }
+  .btn .arw { transition: transform 0.25s var(--ease); }
+  .btn:hover .arw { transform: translateX(4px); }
+  .btn-solid { background: var(--ink); color: var(--bone); }
+  .btn-solid:hover { background: var(--accent); border-color: var(--accent); transform: translateY(-2px); }
+  .btn-ghost { background: transparent; color: var(--ink); }
+  .btn-ghost:hover { background: var(--ink); color: var(--bone); transform: translateY(-2px); }
+
+  /* ============ EDUCATION BAND (top) ============ */
+  .edu-strip { padding-top: 0; padding-bottom: clamp(1rem, 2vw, 1.6rem); }
+  .edu-band {
+    background: var(--ink);
+    color: var(--bone);
+    border-radius: calc(var(--r) + 4px);
+    padding: clamp(1.4rem, 3vw, 2rem) clamp(1.5rem, 3vw, 2.4rem);
+    display: grid;
+    gap: 1.3rem;
+  }
+  @media (min-width: 820px) { .edu-band { grid-template-columns: 1.5fr 1fr; align-items: center; } }
+  .edu-band .k {
+    font-family: var(--mono); font-size: 0.72rem; text-transform: uppercase;
+    letter-spacing: 0.12em; color: #ff8a72; display: block; margin-bottom: 0.55rem;
+  }
+  .edu-band h2 {
+    font-family: var(--display); font-weight: 700;
+    font-size: clamp(1.5rem, 3vw, 2.1rem); letter-spacing: -0.02em;
+    margin: 0 0 0.4rem; line-height: 1; color: var(--bone);
+  }
+  .edu-band .maj { color: #d9d2c6; font-size: 0.98rem; margin: 0; max-width: 46ch; }
+  .edu-nums {
+    display: grid; grid-template-columns: repeat(3, auto); gap: 1.6rem;
+    justify-content: start; margin: 0;
+    border-top: 1px solid rgba(251,248,242,0.16); padding-top: 1.2rem;
+  }
+  @media (min-width: 820px) {
+    .edu-nums { border-top: none; border-left: 1px solid rgba(251,248,242,0.16); padding-top: 0; padding-left: 1.8rem; justify-content: end; }
+  }
+  .edu-nums .n { font-family: var(--display); font-weight: 700; font-size: clamp(1.4rem, 2.6vw, 2rem); line-height: 1; display: block; color: var(--bone); }
+  .edu-nums .l { font-family: var(--mono); font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.05em; color: #c7bfb0; margin-top: 0.35rem; display: block; }
+
+  /* ============ SECTION HEADERS ============ */
+  .section { padding-block: clamp(3rem, 6vw, 5rem); }
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: clamp(1.8rem, 3.5vw, 2.6rem);
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 1.1rem;
+  }
+  .section-num {
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+    letter-spacing: 0.1em;
+  }
+  .section-title {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(2rem, 5.5vw, 3.9rem);
+    line-height: 0.98;
+    letter-spacing: -0.03em;
+    margin: 0;
+    flex: 1 1 12ch;
+  }
+  .section-note {
+    font-family: var(--serif);
+    font-style: italic;
+    color: var(--muted);
+    font-size: 1.05rem;
+    max-width: 30ch;
+  }
+
+  /* ============ GROUP LABEL (organises the work section) ============ */
+  .group-label {
+    font-family: var(--mono);
+    font-size: 0.76rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--ink-soft);
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    margin: clamp(2rem, 4vw, 2.8rem) 0 1.2rem;
+  }
+  .group-label::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+  }
+  .group-label .n { color: var(--accent-deep); }
+  .work-lead .group-label { margin-top: 0; }
+
+  /* ============ FLAGSHIP PROJECT (REFIT) ============ */
+  .refit {
+    background: var(--ink);
+    color: var(--bone);
+    border-radius: calc(var(--r) + 8px);
+    overflow: hidden;
+    position: relative;
+    display: grid;
+    gap: 0;
+  }
+  @media (min-width: 940px) {
+    .refit { grid-template-columns: 1.08fr 0.92fr; }
+  }
+  .refit-body { padding: clamp(1.8rem, 4vw, 3rem); }
+  .refit-kicker {
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #d9d2c6;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin: 0 0 1.2rem;
+  }
+  .refit-kicker .tag {
+    background: var(--accent);
+    color: var(--bone);
+    padding: 0.25rem 0.6rem;
+    border-radius: 999px;
+    letter-spacing: 0.05em;
+  }
+  .refit h3 {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(2.3rem, 5.5vw, 3.6rem);
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    margin: 0 0 1rem;
+  }
+  .refit p {
+    color: #d9d2c6;
+    max-width: 46ch;
+    margin: 0 0 1rem;
+  }
+  .refit-meta {
+    list-style: none;
+    padding: 0;
+    margin: 1.4rem 0 1.5rem;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.9rem 1.4rem;
+    border-top: 1px solid rgba(251,248,242,0.16);
+    padding-top: 1.3rem;
+  }
+  .refit-meta dt {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #c7bfb0;
+    margin-bottom: 0.15rem;
+  }
+  .refit-meta dd { margin: 0; font-size: 0.98rem; color: var(--bone); }
+
+  .refit-visual {
+    position: relative;
+    min-height: 260px;
+    background:
+      radial-gradient(120% 90% at 80% 20%, rgba(255,77,46,0.5), transparent 60%),
+      linear-gradient(160deg, #2a2620, #14120f);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    overflow: hidden;
+  }
+  .refit-visual .refit-shot {
+    margin: 0;
+    width: min(92%, 380px);
+    aspect-ratio: 4 / 3.1;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.18);
+    box-shadow: 0 40px 80px -30px rgba(0,0,0,0.7);
+    transform: rotate(-2deg);
+    transition: transform 0.5s var(--ease);
+  }
+  .refit:hover .refit-visual .refit-shot { transform: rotate(0deg) scale(1.02); }
+  .refit-visual .refit-shot img { width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block; }
+
+  /* ============ PROJECT GRID (even, tidy) ============ */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+    gap: 1.2rem;
+  }
+
+  .card {
+    background: var(--bone);
+    border: 1px solid var(--line);
+    border-radius: var(--r);
+    padding: clamp(1.4rem, 2.4vw, 1.8rem);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.35s var(--ease), border-color 0.35s var(--ease);
+  }
+  .card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    box-shadow: inset 0 0 0 1.5px transparent;
+    transition: box-shadow 0.35s var(--ease);
+    pointer-events: none;
+  }
+  .card:hover { transform: translateY(-4px); border-color: var(--ink); }
+  .card:hover::after { box-shadow: inset 0 0 0 1.5px var(--ink); }
+
+  /* flagship card (Lead Developer) — distinct without a second full block */
+  .card-flag { background: var(--olive); color: var(--bone); border-color: var(--olive); }
+  .card-flag p { color: #e7e6d5; }
+  .card-flag .card-tag { color: #dfe0cb; }
+  .card-flag:hover { border-color: var(--bone); }
+  .card-flag:hover::after { box-shadow: inset 0 0 0 1.5px rgba(251,248,242,0.5); }
+  .card-flag .link { color: var(--bone); border-bottom-color: var(--accent); }
+  .card-flag .link:hover { color: #ffd9cf; }
+
+  /* research highlight card (SUDEP) */
+  .card-prestige { border-top: 3px solid var(--accent); }
+
+  .card-tag {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink-soft);
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 0.85rem;
+  }
+  .card-tag .prestige {
+    background: var(--olive);
+    color: var(--bone);
+    padding: 0.2rem 0.55rem;
+    border-radius: 999px;
+    letter-spacing: 0.04em;
+  }
+  .card-flag .card-tag .prestige { background: var(--accent); }
+  .card h3 {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(1.3rem, 2.2vw, 1.7rem);
+    line-height: 1.04;
+    letter-spacing: -0.02em;
+    margin: 0 0 0.6rem;
+  }
+  .card p { margin: 0 0 1rem; color: var(--ink-soft); font-size: 0.98rem; line-height: 1.55; }
+  .card p:last-of-type { margin-bottom: 0; }
+
+  .stat-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.4rem;
+    margin: 1rem 0;
+    padding-top: 1rem;
+    border-top: 1px solid var(--line);
+  }
+  .stat { min-width: 5.5rem; }
+  .stat .n {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(1.5rem, 2.6vw, 2rem);
+    line-height: 1;
+    letter-spacing: -0.03em;
+    color: var(--accent-deep);
+    display: block;
+  }
+  .stat .l {
+    font-family: var(--mono);
+    font-size: 0.66rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    margin-top: 0.3rem;
+    display: block;
+  }
+
+  .card-links {
+    margin-top: auto;
+    padding-top: 1.1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.1rem;
+  }
+  .link {
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    color: var(--ink);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    border-bottom: 1.5px solid var(--accent);
+    padding-bottom: 2px;
+    transition: color 0.2s var(--ease), gap 0.2s var(--ease);
+  }
+  .link:hover { color: var(--accent-deep); gap: 0.6rem; }
+  .link .arw { transition: transform 0.2s var(--ease); }
+  .link:hover .arw { transform: translateX(3px); }
+
+  /* game media strip — trimmed to two tiles */
+  .games-media {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.6rem;
+    margin: 0.4rem 0 1rem;
+  }
+  .games-media figure { margin: 0; position: relative; border-radius: 10px; overflow: hidden; border: 1px solid var(--line); }
+  .games-media img,
+  .games-media video { width: 100%; height: 100%; object-fit: cover; aspect-ratio: 16 / 10; }
+  .games-media figcaption {
+    position: absolute; left: 6px; bottom: 6px;
+    font-family: var(--mono); font-size: 0.58rem;
+    background: rgba(25,23,20,0.82); color: var(--bone);
+    padding: 0.2rem 0.5rem; border-radius: 999px; letter-spacing: 0.04em;
+  }
+
+  /* ============ SKILLS ============ */
+  .chip-groups { display: grid; gap: 1.8rem 3rem; grid-template-columns: 1fr; }
+  @media (min-width: 760px) { .chip-groups { grid-template-columns: 1fr 1fr; } }
+  .skill-group h3 {
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--ink-soft);
+    margin: 0 0 0.9rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .chips { display: flex; flex-wrap: wrap; gap: 0.55rem; list-style: none; padding: 0; margin: 0; }
+  .chips li {
+    font-family: var(--body);
+    font-size: 0.96rem;
+    background: var(--bone);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 0.4rem 0.9rem;
+    transition: transform 0.2s var(--ease), background 0.2s var(--ease), color 0.2s var(--ease), border-color 0.2s var(--ease);
+  }
+  .chips li:hover { background: var(--ink); color: var(--bone); border-color: var(--ink); transform: translateY(-2px); }
+
+  /* ============ CONTACT ============ */
+  .contact { padding-block: clamp(3.5rem, 8vw, 6rem); }
+  .contact-inner { text-align: left; }
+  .contact-eyebrow {
+    font-family: var(--mono); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.14em;
+    color: var(--ink-soft); margin: 0 0 1.1rem;
+  }
+  .contact h2 {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(2.4rem, 8vw, 6rem);
+    line-height: 0.92;
+    letter-spacing: -0.035em;
+    margin: 0 0 1.4rem;
+  }
+  .contact h2 em { font-style: normal; font-family: var(--serif); color: var(--accent); font-weight: 400; }
+  .contact-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin-top: 1.8rem;
+  }
+  .contact-links a {
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: 1.5px solid var(--ink);
+    border-radius: 999px;
+    padding: 0.9rem 1.5rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    transition: background 0.25s var(--ease), color 0.25s var(--ease), transform 0.25s var(--ease);
+  }
+  .contact-links a:hover { background: var(--ink); color: var(--bone); transform: translateY(-3px); }
+  .contact-links a.primary { background: var(--accent); border-color: var(--accent); color: var(--bone); }
+  .contact-links a.primary:hover { background: var(--accent-deep); border-color: var(--accent-deep); }
+
+  /* ============ FOOTER ============ */
+  .site-footer {
+    border-top: 1px solid var(--line);
+    padding-block: 2.2rem;
+  }
+  .footer-inner {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 1rem;
+    align-items: center;
+    font-family: var(--mono);
+    font-size: 0.76rem;
+    letter-spacing: 0.03em;
+    color: var(--muted);
+  }
+  .footer-inner a { text-decoration: none; color: var(--ink-soft); border-bottom: 1px solid var(--accent); }
+  .footer-inner a:hover { color: var(--accent-deep); }
+
+  /* ============ REVEAL ANIMATION ============ */
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s var(--ease), transform 0.7s var(--ease); }
+  .reveal.in { opacity: 1; transform: none; }
+
+  /* staggered hero entrance */
+  .hero .stagger { opacity: 0; transform: translateY(20px); animation: rise 0.9s var(--ease) forwards; }
+  .hero .stagger:nth-child(1) { animation-delay: 0.05s; }
+  .hero .hero-title { animation-delay: 0.12s; }
+  @keyframes rise { to { opacity: 1; transform: none; } }
+  .hero-title.stagger { opacity: 0; transform: translateY(24px); animation: rise 1s var(--ease) 0.12s forwards; }
+  .hero-lower.stagger { animation-delay: 0.28s; }
+
+  /* ============ REDUCED MOTION ============ */
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+    }
+    .reveal, .hero .stagger, .hero-title.stagger { opacity: 1 !important; transform: none !important; }
+  }
+</style>
 </head>
 <body>
 
-<nav class="navbar">
-    <div class="nav-content">
-        <a href="#" class="nav-logo">A.S.</a>
-        <div class="nav-links">
-            <a href="#about">About</a>
-            <a href="#projects">Projects &amp; Research</a>
-            <a href="#tutorials">Tutorials</a>
-            <a href="#skills">Skills</a>
-            <a href="#contact">Contact</a>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap nav">
+    <a class="brand" href="#top" aria-label="Ava Sklar, home">
+      <span class="dot" aria-hidden="true"></span>
+      Ava Sklar
+    </a>
+    <nav class="nav-desktop" aria-label="Primary">
+      <div class="nav-links">
+        <a href="#work">Work</a>
+        <a href="#skills">Skills</a>
+      </div>
+    </nav>
+    <a class="nav-cta" href="#contact">Get in touch</a>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ============ HERO ============ -->
+  <section class="hero wrap" id="top" aria-labelledby="hero-title">
+    <p class="hero-eyebrow stagger">Product builder · Founder · Bucknell &rsquo;28</p>
+
+    <h1 class="hero-title stagger" id="hero-title">
+      <span class="line">I build things</span>
+      <span class="line">that make life</span>
+      <span class="line"><em>work for</em> everyone.</span>
+    </h1>
+
+    <div class="hero-lower stagger">
+      <div>
+        <p class="hero-lede">
+          I&apos;m an <strong>AI-native product builder</strong> — I read what people actually
+          want and ship it as real software, building <span class="hl">with AI</span> instead of
+          hand-coding. A psychology major who&apos;s launched a marketplace, shipped apps in beta,
+          and built analytics that change how a business runs.
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-solid" href="#work">See the work <span class="arw" aria-hidden="true">→</span></a>
+          <a class="btn btn-ghost" href="https://bucknellrefit.com" target="_blank" rel="noopener noreferrer">Bucknell Refit, live <span class="arw" aria-hidden="true">↗</span></a>
         </div>
+      </div>
+
+      <figure class="hero-figure">
+        <img src="assets/headshot.png" alt="Ava Sklar, a college student, smiling in a professional headshot portrait." width="320" height="400" />
+        <span class="badge" aria-hidden="true">Founder · Product builder · Analyst</span>
+      </figure>
     </div>
-</nav>
+  </section>
 
-<!-- HERO -->
-<section class="hero" id="about">
-    <div class="hero-content">
-        <div class="hero-text">
-            <p class="hero-greeting">Hi, I'm</p>
-            <h1>Ava Sklar</h1>
-            <p class="hero-tagline">Student passionate about using technology to improve lives &mdash; from predicting epilepsy risk to making games accessible for everyone.</p>
-            <p class="hero-details">B.S. Psychology with minors in Business Analytics &amp; Computer Science<br>Bucknell University &middot; Class of 2028 &middot; GPA 3.75</p>
-            <div class="hero-links">
-                <a href="https://www.linkedin.com/in/ava-sklar-06851a2a2" target="_blank" class="btn btn-primary">LinkedIn</a>
-                <a href="https://github.com/avarsklar" target="_blank" class="btn btn-outline">GitHub</a>
-            </div>
-        </div>
-        <div class="hero-image">
-            <img src="assets/headshot.png" alt="Ava Sklar headshot">
-        </div>
+  <!-- ============ EDUCATION (top) ============ -->
+  <section class="edu-strip wrap" aria-labelledby="edu-title">
+    <div class="edu-band">
+      <div>
+        <span class="k">Education</span>
+        <h2 id="edu-title">Bucknell University</h2>
+        <p class="maj">B.S. Psychology · minors in Business Analytics &amp; Computer Science · Lewisburg, PA · Houston, TX native</p>
+      </div>
+      <dl class="edu-nums">
+        <div><dt class="n">3.75</dt><dd class="l">GPA / 4.00</dd></div>
+        <div><dt class="n">35</dt><dd class="l">ACT</dd></div>
+        <div><dt class="n">May 2028</dt><dd class="l">Expected</dd></div>
+      </dl>
     </div>
-</section>
+  </section>
 
-<!-- PROJECTS & RESEARCH -->
-<section class="section section-alt" id="projects">
-    <div class="section-content">
-        <h2>Projects &amp; Research</h2>
-        <!-- ── EYE TRACKING ── -->
-        <h3 class="project-title">
-            Infant Eye Movement Analysis &middot; <span class="title-date">Jan 2026 &ndash; Present</span>
-            <span style="font-size: 0.8rem; font-weight: 500; color: #16a34a; background: #f0fdf4; padding: 0.2rem 0.65rem; border-radius: 100px; vertical-align: middle;">Ongoing</span>
-        </h3>
-        <div class="card" style="border-color: var(--color-accent);">
-            <div class="card-label">Data Analysis Fellow &middot; Bucknell University</div>
-            <p>Using Python and MATLAB to interpret babies' eye movement patterns. Synthesizing data with faculty mentors and stakeholders for symposium presentation. This work sits at the intersection of developmental psychology and computational data analysis.</p>
-            <div class="card-tags">
-                <span class="tag">Python</span>
-                <span class="tag">MATLAB</span>
-                <span class="tag">Eye Tracking</span>
-                <span class="tag">Developmental Psychology</span>
-            </div>
-        </div>
-
-        <!-- ── CLASS LABS ── -->
-        <h3 class="project-title">
-            Class Labs &middot; <span class="title-date">Spring 2026</span>
-            <span style="font-size: 0.8rem; font-weight: 500; color: #16a34a; background: #f0fdf4; padding: 0.2rem 0.65rem; border-radius: 100px; vertical-align: middle;">Ongoing</span>
-        </h3>
-        <div class="games-indent">
-            <div class="card" style="border-color: var(--color-accent);">
-                <div class="card-label">CS204 Pair Project &middot; Bucknell University</div>
-                <h3 style="font-size: 1.15rem; margin-bottom: 0.4rem;">Inventory Management System</h3>
-                <p>A command-line inventory system built with a partner. Loads product data from multiple CSV files into a class hierarchy, supports search, category filtering, quantity updates, total value computation, and CSV export.</p>
-                <div class="card-details">
-                    <div class="detail-item">
-                        <span class="detail-label">Design</span>
-                        <span>Inheritance hierarchy: <code>Inventory</code> → <code>Item</code> → five subclasses (<code>Merch</code>, <code>Gadget</code>, <code>HomeGear</code>, <code>Collectible</code>, <code>Book</code>). Each subclass enforces type validation in <code>__init__</code> and overrides <code>__str__</code>.</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">Features</span>
-                        <span>CSV ingestion with robust error handling, interactive menu, inventory export back to CSV, unit tests.</span>
-                    </div>
-                </div>
-                <div class="card-tags">
-                    <span class="tag">Python</span>
-                    <span class="tag">OOP &amp; Inheritance</span>
-                    <span class="tag">CSV I/O</span>
-                    <span class="tag">Pair Programming</span>
-                    <span class="tag">Unit Testing</span>
-                </div>
-                <p style="margin-top: 0.75rem; margin-bottom: 0; font-size: 0.85rem; color: var(--color-text-muted);">Private repo &middot; BUCSD/pair-project-1-sklar-school</p>
-            </div>
-        </div>
-
-        <!-- ── GAMES ── -->
-        <h3 class="project-title">
-            Accessible Arcade Games &middot; <span class="title-date">2025</span>
-        </h3>
-        <p style="color: var(--color-text-muted); margin-bottom: 1.25rem;">As part of a Bucknell University game development internship, I built a collection of <strong>6 accessible arcade games</strong> in Python using Pygame, designed for deployment on a campus arcade machine.</p>
-        <a href="https://github.com/avarsklar/ava-arcade-games" target="_blank" class="btn btn-outline">View on GitHub</a>
-        <div class="games-indent">
-            <div class="games-grid">
-                <div class="game-card">
-                    <div class="game-img">
-                        <video src="assets/tutorialvideo.mov" autoplay muted loop playsinline aria-label="Accessible Car Game gameplay demo"></video>
-                    </div>
-                    <div class="game-info">
-                        <h3>Accessible Car Game</h3>
-                        <p>Car-dodging game built as a teaching tool for accessibility tutorials. Features high-contrast visuals, slow mode, Atkinson Hyperlegible font, and user-controlled volume.</p>
-                    </div>
-                </div>
-                <div class="game-card">
-                    <div class="game-img">
-                        <video src="assets/crossyRoadvid.mov" autoplay muted loop playsinline aria-label="Crossy Road gameplay demo"></video>
-                    </div>
-                    <div class="game-info">
-                        <h3>Crossy Road</h3>
-                        <p>Frogger-style road-crossing game with oncoming traffic, collision detection, and progressive difficulty. Features high-contrast vehicle colors and keyboard-only controls.</p>
-                    </div>
-                </div>
-                <div class="game-card">
-                    <div class="game-img">
-                        <video src="assets/pacmanvideo.mov" autoplay muted loop playsinline aria-label="Pacman gameplay demo"></video>
-                    </div>
-                    <div class="game-info">
-                        <h3>Pacman</h3>
-                        <p>Full clone with ghost AI (Blinky, Pinky, Inky, Clyde), power-ups, level progression, and persistent high scores. Modular architecture with separate game state, event handling, and screen management systems.</p>
-                    </div>
-                </div>
-                <div class="game-card">
-                    <div class="game-img">
-                        <video src="assets/flappybirdvideo.mov" autoplay muted loop playsinline aria-label="Flappy Bird gameplay demo"></video>
-                    </div>
-                    <div class="game-info">
-                        <h3>Flappy Bird</h3>
-                        <p>Pipe-dodging game with gravity physics, collision detection, and high score tracking. Includes adjustable speed mode for accessibility.</p>
-                    </div>
-                </div>
-                <div class="game-card">
-                    <div class="game-img">
-                        <video src="assets/tetrisvideo.mov" autoplay muted loop playsinline aria-label="Tetris gameplay demo"></video>
-                    </div>
-                    <div class="game-info">
-                        <h3>Tetris</h3>
-                        <p>Classic block-placement game with level progression, piece rotation, and score tracking.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="accessibility-callout">
-                <h3>Accessibility Features Across All Games</h3>
-                <div class="a11y-grid">
-                    <div class="a11y-item"><span class="a11y-icon">&#9000;</span><span>Keyboard-only controls</span></div>
-                    <div class="a11y-item"><span class="a11y-icon">&#9201;</span><span>Adjustable speed modes (normal/slow)</span></div>
-                    <div class="a11y-item"><span class="a11y-icon">&#9775;</span><span>High-contrast color schemes</span></div>
-                    <div class="a11y-item"><span class="a11y-icon">Aa</span><span>Atkinson Hyperlegible font</span></div>
-                    <div class="a11y-item"><span class="a11y-icon">&#128266;</span><span>Volume controls</span></div>
-                    <div class="a11y-item"><span class="a11y-icon">&#9654;</span><span>Clear visual state indicators</span></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- ── BURNOUT RESEARCH ── -->
-        <h3 class="project-title">
-            Burnout Among Accessibility Specialists &middot; <span class="title-date">Summer 2025</span>
-        </h3>
-        <div class="card" style="border-color: var(--color-accent);">
-            <div class="card-label">Research Intern &middot; Bucknell CS Department</div>
-            <p>Part of a research team investigating burnout among accessibility specialists. Synthesized academic literature, structured complex datasets, and co-authored a paper for potential publication.</p>
-            <div class="card-tags">
-                <span class="tag">Literature Synthesis</span>
-                <span class="tag">Data Structuring</span>
-                <span class="tag">Accessibility</span>
-                <span class="tag">Team Leadership</span>
-            </div>
-        </div>
-
-        <!-- ── SUDEP RESEARCH ── -->
-        <h3 class="project-title">
-            Sleep Breathing Variability as a Potential Biomarker for SUDEP Risk &middot; <span class="title-date">2023</span>
-        </h3>
-        <div class="card" style="border-color: var(--color-accent);">
-            <div class="card-label">Presenting Author &middot; <strong>American Epilepsy Society Annual Meeting</strong></div>
-            <p>Presented original research at the American Epilepsy Society Annual Meeting investigating whether breathing variability during sleep could serve as a premortem biomarker for Sudden Unexpected Death in Epilepsy (SUDEP). Analyzed multi-modal EEG and cardiorespiratory recordings from 24 SUDEP patients and matched controls.</p>
-            <a href="assets/sudep-paper.pdf" target="_blank" class="btn btn-outline" style="margin-bottom: 1rem; display: inline-block;">View Paper</a>
-            <div class="card-details">
-                <div class="detail-item">
-                    <span class="detail-label">Methods</span>
-                    <span>Developed custom MATLAB code to extract breathing biomarkers (CV, RMSSD, HF/LF ratio, approximate entropy) from thoraco-abdominal band recordings during NREM sleep. Used Wilcoxon rank sum tests for non-parametric comparison.</span>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-label">Key Finding</span>
-                    <span>Coefficient of variation (CV) was significantly higher in the SUDEP group (P=0.0227), suggesting breathing variability as a viable premortem biomarker for risk stratification.</span>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-label">Impact</span>
-                    <span>Findings support early identification of at-risk patients and could help prioritize preventive strategies for epilepsy patients.</span>
-                </div>
-            </div>
-            <div class="card-tags">
-                <span class="tag">MATLAB</span>
-                <span class="tag">Statistical Analysis</span>
-                <span class="tag">Signal Processing</span>
-                <span class="tag">Biomarker Discovery</span>
-                <span class="tag">NIH Funded</span>
-            </div>
-        </div>
-
+  <!-- ============ WORK ============ -->
+  <section class="section wrap" id="work" aria-labelledby="work-title">
+    <div class="section-head">
+      <span class="section-num">01</span>
+      <h2 class="section-title" id="work-title">Selected work &amp; research</h2>
+      <p class="section-note">A founder&apos;s marketplace, apps in beta, decision-changing analytics, and published research.</p>
     </div>
-</section>
 
-<!-- TUTORIALS -->
-<section class="section" id="tutorials">
-    <div class="section-content">
-        <h2>Tutorials</h2>
-        <p class="section-subtitle">Teaching accessibility through game development</p>
+    <!-- GROUP: FLAGSHIP -->
+    <div class="work-lead">
+      <div class="group-label"><span class="n">01</span> Flagship build</div>
 
-        <div class="tutorials-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
-            <a href="tutorial-professor.html" class="card" style="text-decoration: none; color: inherit; border-left: 4px solid #2563eb; transition: box-shadow 0.2s, transform 0.2s;">
-                <div class="card-label">Instructor Guide</div>
-                <h3>Making Pygame Games Accessible</h3>
-                <p class="card-role">4-lesson module with timelines, rubrics &amp; discussion prompts</p>
-                <p>A complete teaching guide for professors covering Pygame fundamentals, OOP game design, WCAG accessibility auditing, and hands-on implementation of accessible features. Includes assessment rubrics and extension activities.</p>
-                <div class="card-tags">
-                    <span class="tag">Lesson Plans</span>
-                    <span class="tag">WCAG AA</span>
-                    <span class="tag">Assessment Rubric</span>
-                    <span class="tag">Discussion Prompts</span>
-                </div>
-            </a>
-
-            <a href="tutorial-student.html" class="card" style="text-decoration: none; color: inherit; border-left: 4px solid #7c3aed; transition: box-shadow 0.2s, transform 0.2s;">
-                <div class="card-label" style="color: #7c3aed;">Beginner Tutorial</div>
-                <h3>Make Your Game Playable by Everyone</h3>
-                <p class="card-role">Step-by-step guide &mdash; no experience needed</p>
-                <p>A friendly walkthrough for high school students with little or no coding experience. Builds a car-dodging game from scratch, then adds four accessibility features: high-contrast colors, slow mode, readable fonts, and volume control.</p>
-                <div class="card-tags">
-                    <span class="tag">Beginner Friendly</span>
-                    <span class="tag">Step-by-Step</span>
-                    <span class="tag">Hands-On Code</span>
-                    <span class="tag">Visual Examples</span>
-                </div>
-            </a>
+      <article class="refit reveal" aria-labelledby="refit-title">
+        <div class="refit-body">
+          <p class="refit-kicker"><span class="tag">Founder</span> Entrepreneurship · Marketplace</p>
+          <h3 id="refit-title">Bucknell Refit</h3>
+          <p>
+            A two-sided clothing marketplace I built for the Bucknell campus — on-campus pickup, no
+            shipping. As a first-time founder I own the product, pricing model, and go-to-market,
+            directing the build and integrating Stripe. Its standout feature:
+            <strong style="color:var(--bone);">AI-powered listing auto-fill</strong> — paste a product
+            link and the listing writes itself.
+          </p>
+          <dl class="refit-meta">
+            <div><dt>Role</dt><dd>Founder &amp; builder</dd></div>
+            <div><dt>Signature</dt><dd>AI listing auto-fill</dd></div>
+            <div><dt>Payments</dt><dd>Stripe integrated</dd></div>
+            <div><dt>Traction</dt><dd>~150 active users</dd></div>
+          </dl>
+          <div class="card-links">
+            <a class="link" href="https://bucknellrefit.com" target="_blank" rel="noopener noreferrer" style="color:var(--bone);">View live <span class="arw" aria-hidden="true">↗</span></a>
+          </div>
         </div>
-    </div>
-</section>
-
-<!-- SKILLS -->
-<section class="section" id="skills">
-    <div class="section-content">
-        <h2>Skills &amp; Tools</h2>
-        <div class="skills-grid">
-            <div class="skill-group">
-                <h3>Programming</h3>
-                <div class="skill-items">
-                    <span class="skill">Python</span>
-                    <span class="skill">MATLAB</span>
-                    <span class="skill">R</span>
-                    <span class="skill">SQL</span>
-                </div>
-            </div>
-            <div class="skill-group">
-                <h3>Data &amp; Analysis</h3>
-                <div class="skill-items">
-                    <span class="skill">Statistical Analysis</span>
-                    <span class="skill">Signal Processing</span>
-                    <span class="skill">Data Visualization</span>
-                    <span class="skill">Excel / Spreadsheet Modeling</span>
-                    <span class="skill">Non-Parametric Tests</span>
-                </div>
-            </div>
-            <div class="skill-group">
-                <h3>Libraries &amp; Tools</h3>
-                <div class="skill-items">
-                    <span class="skill">Pygame</span>
-                    <span class="skill">BreathMetrics</span>
-<span class="skill">Git / GitHub</span>
-                </div>
-            </div>
-            <div class="skill-group">
-                <h3>Coursework</h3>
-                <div class="skill-items">
-                    <span class="skill">Data Structures &amp; Algorithms</span>
-                    <span class="skill">Psychological Statistics</span>
-                    <span class="skill">Spreadsheet Modeling</span>
-                    <span class="skill">Creative Computing</span>
-                </div>
-            </div>
+        <div class="refit-visual">
+          <figure class="refit-shot">
+            <img src="assets/refit-shop.png" alt="The Bucknell Refit marketplace: a browse page showing student clothing listings with prices." width="1000" height="1882" />
+          </figure>
         </div>
+      </article>
     </div>
-</section>
 
-<!-- CONTACT -->
-<section class="section section-alt" id="contact">
-    <div class="section-content contact-section">
-        <h2>Let's Connect</h2>
-        <div class="contact-links">
-            <a href="https://www.linkedin.com/in/ava-sklar-06851a2a2" target="_blank" class="btn btn-primary">LinkedIn</a>
-            <a href="https://github.com/avarsklar" target="_blank" class="btn btn-outline">GitHub</a>
+    <!-- GROUP: PRODUCTS, TOOLS & DATA -->
+    <div class="group-label"><span class="n">02</span> Products, tools &amp; data</div>
+    <div class="grid">
+      <!-- LEAD DEVELOPER SKILLS (flagship card, most recent) -->
+      <article class="card card-flag reveal" aria-labelledby="leaddev-title">
+        <span class="card-tag"><span class="prestige">Creator</span> Open-source · Dev tooling · 2026</span>
+        <h3 id="leaddev-title">Scared to Touch It — Lead Developer Skills</h3>
+        <p>
+          A kit of nine plain-English AI skills that turn the AI a non-technical person already uses
+          into a careful lead developer — so they can change an app without breaking it, launch safely,
+          and never be the only one who can run it. Ships with a handbook site and explainer videos.
+        </p>
+        <div class="card-links">
+          <a class="link" href="https://github.com/avarsklar/lead-developer-skills" target="_blank" rel="noopener noreferrer">View on GitHub <span class="arw" aria-hidden="true">↗</span></a>
         </div>
-    </div>
-</section>
+      </article>
 
-<footer>
-    <p>Ava Sklar &middot; 2026</p>
+      <!-- CLUB RALLY -->
+      <article class="card reveal" aria-labelledby="clubrally-title">
+        <span class="card-tag">Builder &amp; PM · In beta · 2026</span>
+        <h3 id="clubrally-title">Club Ralley</h3>
+        <p>
+          A Bucknell student startup that came to me through the university&apos;s entrepreneurship
+          center to build their app. I&apos;m the builder and product manager — now in beta with real
+          users. My first team-built product, and where the PM role clicked.
+        </p>
+      </article>
+
+      <!-- RESTAURANT ANALYTICS (kept generic) -->
+      <article class="card reveal" aria-labelledby="analytics-title">
+        <span class="card-tag">Data Analyst · Paid engagement · 2026</span>
+        <h3 id="analytics-title">Restaurant Analytics — Owner Dashboards</h3>
+        <p>
+          On a paid analytics engagement for a 7-restaurant group (~$25M in annual revenue), I built
+          the owner-facing dashboards (SQL · DuckDB · Python) and designed a menu-category crosswalk
+          that revealed bar and private-event revenue the owners couldn&apos;t see. I also caught and
+          corrected my own findings under scrutiny — killing false day-of-week effects that were
+          really data artifacts.
+        </p>
+        <div class="stat-row">
+          <div class="stat"><span class="n">~$1.9M</span><span class="l">Previously invisible revenue I surfaced</span></div>
+          <div class="stat"><span class="n">7</span><span class="l">Restaurants · ~$25M/yr</span></div>
+        </div>
+      </article>
+
+      <!-- ACCESSIBLE GAMES -->
+      <article class="card reveal" aria-labelledby="games-title">
+        <span class="card-tag">Game Development Intern · 2025</span>
+        <h3 id="games-title">Accessible Arcade Games</h3>
+        <p>
+          Six accessible arcade games in Python &amp; Pygame for a campus arcade machine — with
+          keyboard-only controls, adjustable speed, high-contrast schemes, the Atkinson Hyperlegible
+          typeface, and volume control built into every title.
+        </p>
+        <div class="games-media">
+          <figure>
+            <video src="assets/pacmanvideo.mov" muted loop playsinline autoplay aria-hidden="true" poster="assets/pacman.png"></video>
+            <figcaption>Pac-Man · ghost AI</figcaption>
+          </figure>
+          <figure>
+            <img src="assets/tetris.png" alt="Screenshot of the accessible Tetris game with high-contrast blocks." />
+            <figcaption>Tetris</figcaption>
+          </figure>
+        </div>
+        <div class="card-links">
+          <a class="link" href="https://github.com/avarsklar/ava-arcade-games" target="_blank" rel="noopener noreferrer">Repository <span class="arw" aria-hidden="true">↗</span></a>
+        </div>
+      </article>
+    </div>
+
+    <!-- GROUP: RESEARCH -->
+    <div class="group-label"><span class="n">03</span> Research</div>
+    <div class="grid">
+      <!-- INFANT EYE MOVEMENT (most recent, completed) -->
+      <article class="card reveal" aria-labelledby="infant-title">
+        <span class="card-tag">Senior Data-Analysis Fellow · Bucknell · 2025–26</span>
+        <h3 id="infant-title">Infant Eye-Movement Analysis</h3>
+        <p>
+          I used Python and MATLAB to interpret babies&apos; eye-movement patterns — developmental
+          psychology meets computational analysis — culminating in a symposium presentation. I was
+          invited back as a senior fellow to lead the project and tutor peers.
+        </p>
+        <div class="card-links">
+          <a class="link" href="https://github.com/avarsklar/InfantEyeMovement" target="_blank" rel="noopener noreferrer">Repository <span class="arw" aria-hidden="true">↗</span></a>
+        </div>
+      </article>
+
+      <!-- BURNOUT -->
+      <article class="card reveal" aria-labelledby="burnout-title">
+        <span class="card-tag">Research Intern · CS Dept · 2025</span>
+        <h3 id="burnout-title">Burnout Among Accessibility Specialists</h3>
+        <p>
+          I led my team&apos;s efforts on this study — synthesizing academic literature, structuring
+          complex datasets, and co-authoring a paper for potential publication. A human-centered look
+          at the people who make technology usable for everyone.
+        </p>
+      </article>
+
+      <!-- SUDEP - prestige -->
+      <article class="card card-prestige reveal" aria-labelledby="sudep-title">
+        <span class="card-tag"><span class="prestige">Presenting author</span> American Epilepsy Society · 2023</span>
+        <h3 id="sudep-title">Sleep-Breathing Variability as a Biomarker for SUDEP Risk</h3>
+        <p>
+          A presenting-author paper at the American Epilepsy Society Annual Meeting (NIH-funded,
+          published Fall 2023). I wrote custom MATLAB to extract breathing biomarkers from NREM-sleep
+          recordings, then ran Wilcoxon rank-sum tests to compare groups.
+        </p>
+        <div class="stat-row">
+          <div class="stat"><span class="n">P=0.0227</span><span class="l">CV higher in SUDEP group — a viable premortem biomarker</span></div>
+        </div>
+        <div class="card-links">
+          <a class="link" href="assets/sudep-paper.pdf" target="_blank" rel="noopener noreferrer">Read the paper (PDF) <span class="arw" aria-hidden="true">↗</span></a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============ SKILLS ============ -->
+  <section class="section wrap" id="skills" aria-labelledby="skills-title">
+    <div class="section-head">
+      <span class="section-num">02</span>
+      <h2 class="section-title" id="skills-title">Skills &amp; experience</h2>
+      <p class="section-note">The toolkit behind the work — technical, analytical, and human.</p>
+    </div>
+
+    <div class="chip-groups">
+      <div class="skill-group">
+        <h3>Languages &amp; tools</h3>
+        <ul class="chips">
+          <li>Python</li><li>MATLAB</li><li>R</li><li>SQL</li><li>Excel</li>
+          <li>Pygame</li><li>BreathMetrics</li><li>Git / GitHub</li><li>DuckDB</li><li>Stripe</li>
+        </ul>
+      </div>
+      <div class="skill-group">
+        <h3>Analysis &amp; methods</h3>
+        <ul class="chips">
+          <li>Statistical analysis</li><li>Signal processing</li><li>Data visualization</li>
+          <li>Non-parametric tests</li><li>Data pipelines</li>
+        </ul>
+      </div>
+      <div class="skill-group">
+        <h3>Coursework &amp; language</h3>
+        <ul class="chips">
+          <li>Data Structures &amp; Algorithms</li><li>Psychological Statistics</li>
+          <li>Creative Computing &amp; Society</li><li>Spreadsheet Modeling</li>
+          <li>Conversational Spanish</li>
+        </ul>
+      </div>
+      <div class="skill-group">
+        <h3>Volunteer</h3>
+        <ul class="chips">
+          <li>Teach Wallingford — President</li>
+          <li>Recruited &amp; managed 30+ volunteers</li>
+          <li>Kindergarten classroom aid</li>
+          <li>Choate peer math tutor</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CONTACT ============ -->
+  <section class="contact wrap" id="contact" aria-labelledby="contact-title">
+    <div class="contact-inner">
+      <p class="contact-eyebrow">Let&apos;s build something</p>
+      <h2 id="contact-title">Say <em>hello</em> —<br>I&apos;d love to talk.</h2>
+      <p style="max-width:42ch;font-size:1.12rem;color:var(--ink-soft);margin:0;">
+        Warm, curious, and human-centered — always happy to talk research,
+        products, or accessibility.
+      </p>
+      <div class="contact-links">
+        <a class="primary" href="mailto:ars038@bucknell.edu">Email <span aria-hidden="true">→</span></a>
+        <a href="https://www.linkedin.com/in/ava-sklar-06851a2a2" target="_blank" rel="noopener noreferrer">LinkedIn <span aria-hidden="true">↗</span></a>
+        <a href="https://github.com/avarsklar" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <span>© 2026 Ava Sklar — Product builder · Founder · Bucknell &rsquo;28</span>
+    <span>Built &amp; designed by Ava · <a href="#top">Back to top ↑</a></span>
+  </div>
 </footer>
+
+<script>
+  // Scroll-reveal (respects reduced motion)
+  (function () {
+    var prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var items = document.querySelectorAll(".reveal");
+    if (prefersReduced || !("IntersectionObserver" in window)) {
+      items.forEach(function (el) { el.classList.add("in"); });
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("in");
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: "0px 0px -8% 0px" });
+    items.forEach(function (el) { io.observe(el); });
+  })();
+
+  // Pause decorative videos when off-screen to save resources
+  (function () {
+    var vids = document.querySelectorAll("video[autoplay]");
+    if (!("IntersectionObserver" in window)) return;
+    var vo = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        var v = entry.target;
+        if (entry.isIntersecting) { v.play().catch(function () {}); }
+        else { v.pause(); }
+      });
+    }, { threshold: 0.2 });
+    vids.forEach(function (v) { vo.observe(v); });
+  })();
+</script>
 
 </body>
 </html>
