@@ -18,8 +18,8 @@ The site is already live and showing real work. "Done" here means the page a rec
 - [x] All sections populated: hero, education band, work grid (Refit, Lead Developer, Club Ralley, restaurant analytics, accessible games), skills chips, research section (infant eye movement, burnout paper, SUDEP), contact (`index.html`)
 - [x] Accessibility baseline present: skip link, `aria-live` for carousel, focus-visible styles, `prefers-reduced-motion` support, minimum 44px touch targets on nav links (`index.html`)
 - [x] GitHub Pages deploy wired from `main` via `.github/workflows/pages.yml` — push = live in ~1 min (`CLAUDE.md`)
-- [x] Traction figure: "~150 active users" for Refit displayed on the flagship card (`index.html`)
-- [ ] Traction figure freshness: "~150 active users" is shown in the hero card — confirm this is still accurate and up to date before any next round of sharing
+- [x] Traction figure displayed on the flagship card (`index.html`) — ⚠️ currently reads "~150 active users," which overstates it (see fix below)
+- [ ] **Fix the live traction copy** — real numbers are ~150 users total, ~20 active (sold / liked / purchased) (Ava, 2026-07-07). The card's "~150 active users" overstates it; change to "~150 users · ~20 active" — honest and still a real receipt — before any recruiter share
 - [ ] Contact email: uses `ars038@bucknell.edu` — confirm whether a personal address should replace this before the site goes to a recruiter outside Bucknell
 
 > TODO (couldn't confirm from repo): Whether a Workboard / dedicated now-next list for Portfolio exists anywhere — `CLAUDE.md` says "No dedicated workboard file; check `~/ava-os/📋 Projects.md` (Portfolio row)." The Projects.md row reads "shipped · idle backlog only · 2026-07-02."
