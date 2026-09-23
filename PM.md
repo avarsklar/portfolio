@@ -5,7 +5,7 @@ tags: [portfolio, pm-layer]
 
 # PM Layer — Portfolio
 
-*Last updated: 2026-07-07*
+*Last updated: 2026-09-23*
 
 ### 1. What & Why
 A one-page personal portfolio site that presents Ava as an AI-native product builder and PM to recruiters, collaborators, and anyone she's sending her work to. It exists so she can drop a single link — `avarsklar.github.io/portfolio` — and have her story, work, and contact info land instantly, looking like someone who ships things with taste.
@@ -19,8 +19,8 @@ The site is already live and showing real work. "Done" here means the page a rec
 - [x] Accessibility baseline present: skip link, `aria-live` for carousel, focus-visible styles, `prefers-reduced-motion` support, minimum 44px touch targets on nav links (`index.html`)
 - [x] GitHub Pages deploy wired from `main` via `.github/workflows/pages.yml` — push = live in ~1 min (`CLAUDE.md`)
 - [x] Traction figure displayed on the flagship card (`index.html`) — ⚠️ currently reads "~150 active users," which overstates it (see fix below)
-- [ ] **Fix the live traction copy** — real numbers are ~150 users total, ~20 active (sold / liked / purchased) (Ava, 2026-07-07). The card's "~150 active users" overstates it; change to "~150 users · ~20 active" — honest and still a real receipt — before any recruiter share
-- [ ] Contact email: uses `ars038@bucknell.edu` — confirm whether a personal address should replace this before the site goes to a recruiter outside Bucknell
+- [x] **Fix the live traction copy** (done 2026-09-23: now "200+ student sign-ups", from the 209 accounts in the 2026-06-24 restore proof) — real numbers are ~150 users total, ~20 active (sold / liked / purchased) (Ava, 2026-07-07). The card's "~150 active users" overstates it; change to "~150 users · ~20 active" — honest and still a real receipt — before any recruiter share
+- [x] Contact email switched to `avarsklar@gmail.com` 2026-09-23, matching the résumé (was `ars038@bucknell.edu`) — confirm whether a personal address should replace this before the site goes to a recruiter outside Bucknell
 
 > TODO (couldn't confirm from repo): Whether a Workboard / dedicated now-next list for Portfolio exists anywhere — `CLAUDE.md` says "No dedicated workboard file; check `~/ava-os/📋 Projects.md` (Portfolio row)." The Projects.md row reads "shipped · idle backlog only · 2026-07-02."
 
